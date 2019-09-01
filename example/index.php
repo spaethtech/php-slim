@@ -37,15 +37,28 @@ use Slim\Route;
     // NOTE: These controllers should be added last, so the above controllers can override routes as needed.
     // =================================================================================================================
 
-    // Append a route handler for static assets.
-    new Controllers\AssetController($app, __DIR__."/assets/", new FixedAuthenticator(false));
-    // NOTE: This will load static assets (i.e. png, jpg, html, pdf, etc.)
+    // NOTE: This Controller handles any static assets (i.e. png, jpg, html, pdf, etc.)...
+    new Controllers\AssetController(
+        $app,
+        __DIR__."/assets/",
+        // NOTE: If one or more Authenticators are provided, they will override the application-level Authenticator(s).
+        new FixedAuthenticator(true)
+    );
 
-    // Append a route handler for Twig templates.
-    new Controllers\TemplateController($app, __DIR__."/views/");
+    // NOTE: This Controller handles any Twig templates...
+    new Controllers\TemplateController(
+        $app,
+        __DIR__."/views/",
+        // NOTE: Here we can declare null to remove any Authenticator(s), including application-level Authenticator(s).
+        null
+    );
 
-    // Append a route handler for PHP scripts.
-    new Controllers\ScriptController($app, __DIR__."/src/");
+    // NOTE: This Controller handles any PHP scripts...
+    new Controllers\ScriptController(
+        $app,
+        __DIR__."/src/"
+        // NOTE: Or simply omit the parameter to use any application-level Authenticator(s).
+    );
 
 
 
@@ -54,8 +67,8 @@ use Slim\Route;
     $app->get("/",
 
         function ( /** @noinspection PhpUnusedParameterInspection */ Request $request, Response $response, array $args)
-        use ($container)
         {
+            // NOTE: Inside any route closure, $this refers to the Application's Container.
             return $response->write(file_get_contents(__DIR__ . "/index.html"));
         }
 
@@ -66,8 +79,8 @@ use Slim\Route;
     $app->get("/example[/[{name}]]",
 
         function ( /** @noinspection PhpUnusedParameterInspection */ Request $request, Response $response, array $args)
-        use ($container)
         {
+            // NOTE: Inside any route closure, $this refers to the Application's Container.
             return $response->withJson([ "name" => $args["name"] ?? "", "description" => "This is an example JSON route!" ]);
         }
 

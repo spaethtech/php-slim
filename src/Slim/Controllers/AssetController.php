@@ -7,6 +7,7 @@ use MVQN\HTTP\Slim\Middleware\Authentication\AuthenticationHandler;
 use MVQN\HTTP\Slim\Middleware\Authentication\Authenticators\Authenticator;
 
 use Slim\App;
+use Slim\Container;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
@@ -52,8 +53,12 @@ final class AssetController
                         "user"  => $request->getAttribute("user"),
                     ];
 
+                    // NOTE: Inside any route closure, $this refers to the Application's Container.
+                    /** @var Container $container */
+                    $container = $this;
+
                     // Return the default 404 page!
-                    return $app->getContainer()->get("notFoundHandler")($request, $response, $data);
+                    return $container->get("notFoundHandler")($request, $response, $data);
                     //return $response->withStatus(404, "Asset '$file.$ext' not found!");
                 }
 
@@ -66,7 +71,7 @@ final class AssetController
                     case "txt"   :                 $contentType = "text/plain";                break;
                     case "css"   :                 $contentType = "text/css";                  break;
                     case "js"    :                 $contentType = "text/javascript";           break;
-                    case "htm"   : case "html":    $contentType = "text/html";                 break;
+                    //case "htm"   : case "html":    $contentType = "text/html";                 break;
 
                     case "svg"   :                 $contentType = "image/svg+xml";                  break;
                     case "ttf"   :                 $contentType = "application/x-font-ttf";         break;
@@ -87,10 +92,11 @@ final class AssetController
                 // Then return the response!
                 return $response;
             }
-        )->setName(AssetController::class); // NO Authentication necessary here!
+        )->setName(AssetController::class);
 
         if($authenticators !== null)
         {
+            // NOTE: However, outside the route closure, $this refers to the current object like usual!
             $route->add(new AuthenticationHandler($app->getContainer()));
 
             if(!is_array($authenticators))

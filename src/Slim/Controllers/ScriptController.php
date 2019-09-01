@@ -7,6 +7,7 @@ use MVQN\HTTP\Slim\Middleware\Authentication\AuthenticationHandler;
 use MVQN\HTTP\Slim\Middleware\Authentication\Authenticators\Authenticator;
 
 use Slim\App;
+use Slim\Container;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
@@ -50,8 +51,12 @@ final class ScriptController
                         "user"  => $request->getAttribute("user"),
                     ];
 
+                    // NOTE: Inside any route closure, $this refers to the Application's Container.
+                    /** @var Container $container */
+                    $container = $this;
+
                     // Return the default 404 page!
-                    return $app->getContainer()->get("notFoundHandler")($request, $response, $data);
+                    return $container->get("notFoundHandler")($request, $response, $data);
                 }
 
                 /** @noinspection PhpIncludeInspection */
@@ -66,6 +71,7 @@ final class ScriptController
 
         if($authenticators !== null)
         {
+            // NOTE: However, outside the route closure, $this refers to the current object like usual!
             $route->add(new AuthenticationHandler($app->getContainer()));
 
             if(!is_array($authenticators))
