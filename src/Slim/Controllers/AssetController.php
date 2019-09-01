@@ -3,10 +3,13 @@ declare(strict_types=1);
 
 namespace MVQN\HTTP\Slim\Controllers;
 
-use MVQN\HTTP\Slim\Middleware\CallbackAuthentication;
+use MVQN\HTTP\Slim\Middleware\Authentication\AuthenticationHandler;
+use MVQN\HTTP\Slim\Middleware\Authentication\Authenticators\Authenticator;
+
 use Slim\App;
-use Slim\Http\ServerRequest;
+use Slim\Http\Request;
 use Slim\Http\Response;
+
 
 
 /**
@@ -24,27 +27,35 @@ final class AssetController
      * AssetController constructor.
      *
      * @param App $app The Slim Application for which to configure routing.
-     * @param string $path The path in which to find assets.
-     * @param callable|null $authenticator
+     * @param string $path
+     * @param Authenticator[]|Authenticator|null $authenticators
      */
-    public function __construct(App $app, string $path, callable $authenticator = null)
+    public function __construct(App $app, string $path, $authenticators = null)
     {
-        // Get a local reference to the Slim Application's DI Container.
-        $container = $app->getContainer();
-
-        $app->get("/{file:.+}.{ext:jpg|png|pdf|txt|css|js|htm|html|svg|ttf|woff|woff2}",
-            function (ServerRequest $request, Response $response, array $args) use ($container, $path)
+        $route = $app->get("/{file:.+}.{ext:jpg|png|pdf|txt|css|js|htm|html|svg|ttf|woff|woff2}",
+            function (Request $request, Response $response, array $args) use ($app, $path)
             {
                 // Get the file and extension from the matched route.
                 $file = $args["file"];
                 $ext = $args["ext"];
 
                 // Interpolate the absolute path to the static asset.
-                $path = rtrim($path, "/")."/$file.$ext";
+                $path = realpath(rtrim($path, "/") . "/$file.$ext");
 
                 // IF the static asset file does not exist, THEN return a HTTP 404!
                 if(!$path)
-                    return $response->withStatus(404, "Asset '$file.$ext' not found!");
+                {
+                    // Assemble some standard data to send along to the 404 page for debugging!
+                    $data = [
+                        "route" => $request->getAttribute("vRoute"),
+                        "query" => $request->getAttribute("vQuery"),
+                        "user"  => $request->getAttribute("user"),
+                    ];
+
+                    // Return the default 404 page!
+                    return $app->getContainer()->get("notFoundHandler")($request, $response, $data);
+                    //return $response->withStatus(404, "Asset '$file.$ext' not found!");
+                }
 
                 // Specify the Content-Type given the extension...
                 switch ($ext)
@@ -76,7 +87,21 @@ final class AssetController
                 // Then return the response!
                 return $response;
             }
-        )->add(new CallbackAuthentication($container, $authenticator))->setName("asset");
+        )->setName(AssetController::class); // NO Authentication necessary here!
+
+        if($authenticators !== null)
+        {
+            $route->add(new AuthenticationHandler($app->getContainer()));
+
+            if(!is_array($authenticators))
+                $authenticators = [ $authenticators ];
+
+            foreach($authenticators as $authenticator)
+            {
+                if(is_a($authenticator, Authenticator::class))
+                    $route->add($authenticator);
+            }
+        }
     }
 
 }

@@ -3,10 +3,11 @@ declare(strict_types=1);
 
 namespace MVQN\HTTP\Slim\Controllers;
 
-use MVQN\HTTP\Slim\Middleware\CallbackAuthentication;
+use MVQN\HTTP\Slim\Middleware\Authentication\AuthenticationHandler;
+use MVQN\HTTP\Slim\Middleware\Authentication\Authenticators\Authenticator;
 
 use Slim\App;
-use Slim\Http\ServerRequest;
+use Slim\Http\Request;
 use Slim\Http\Response;
 
 /**
@@ -25,15 +26,12 @@ final class ScriptController
      *
      * @param App $app The Slim Application for which to configure routing.
      * @param string $path
-     * @param callable|null $authenticator
+     * @param Authenticator[]|Authenticator|null $authenticators
      */
-    public function __construct(App $app, string $path, callable $authenticator = null)
+    public function __construct(App $app, string $path, $authenticators = [])
     {
-        // Get a local reference to the Slim Application's DI Container.
-        $container = $app->getContainer();
-
-        $app->map([ "GET", "POST" ], "/{file:.+}.{ext:php}",
-            function (ServerRequest $request, Response $response, array $args) use ($container, $path)
+        $route = $app->map([ "GET", "POST" ], "/{file:.+}.{ext:php}",
+            function (Request $request, Response $response, array $args) use ($app, $path)
             {
                 // Get the file and extension from the matched route.
                 $file = $args["file"] ?? "index";
@@ -53,7 +51,7 @@ final class ScriptController
                     ];
 
                     // Return the default 404 page!
-                    return $container->get("notFoundHandler")($request, $response, $data);
+                    return $app->getContainer()->get("notFoundHandler")($request, $response, $data);
                 }
 
                 /** @noinspection PhpIncludeInspection */
@@ -64,7 +62,21 @@ final class ScriptController
                 // The PHP script should handle everything and since there is no Response to return, simply die()!
                 die();
             }
-        )->add(new CallbackAuthentication($container, $authenticator))->setName("script");
+        )->setName(ScriptController::class);
+
+        if($authenticators !== null)
+        {
+            $route->add(new AuthenticationHandler($app->getContainer()));
+
+            if(!is_array($authenticators))
+                $authenticators = [ $authenticators ];
+
+            foreach($authenticators as $authenticator)
+            {
+                if(is_a($authenticator, Authenticator::class))
+                    $route->add($authenticator);
+            }
+        }
     }
 
 }

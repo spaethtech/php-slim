@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace MVQN\HTTP\Slim\Middleware;
+namespace MVQN\HTTP\Slim\Middleware\Routing;
 
 use Psr\Container\ContainerInterface;
 use Slim\Http\Uri;
@@ -98,7 +98,7 @@ class QueryStringRouter
 
     private $defaultRoute;
 
-    public function __construct(string $defaultRoute = "/index.php")
+    public function __construct(string $defaultRoute = "/") //"/index.php")
     {
         $this->defaultRoute = $defaultRoute;
     }

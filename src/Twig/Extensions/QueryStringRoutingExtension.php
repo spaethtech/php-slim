@@ -1,16 +1,18 @@
 <?php
 declare(strict_types=1);
-namespace UCRM\HTTP\Twig\Extensions;
+namespace MVQN\HTTP\Twig\Extensions;
 
 use MVQN\Common\Arrays;
 use MVQN\Common\Strings;
-use MVQN\Localization\Translator;
 use Slim\App;
 use Slim\Container;
 use Slim\Router;
-use UCRM\Common\Plugin;
-use App\Settings;
-use UCRM\Common\SettingsBase;
+
+use Twig\Extension\GlobalsInterface;
+use Twig\Extension;
+use Twig\TwigFilter;
+use Twig\TwigFunction;
+
 
 /**
  * Class Extension
@@ -19,14 +21,14 @@ use UCRM\Common\SettingsBase;
  * @author Ryan Spaeth <rspaeth@mvqn.net>
  * @final
  */
-final class PluginExtension extends \Twig_Extension implements \Twig_Extension_GlobalsInterface
+final class QueryStringRoutingExtension extends Extension\AbstractExtension implements GlobalsInterface
 {
     /** @var string */
     private $settings;
 
-    public function __construct(string $settings)
+    public function __construct(array $globals = [])
     {
-        $this->settings = $settings;
+        self::$globals = $globals;
     }
 
 
@@ -56,7 +58,7 @@ final class PluginExtension extends \Twig_Extension implements \Twig_Extension_G
 
         return [
             //new \Twig_SimpleFilter('without', [$this, 'withoutFilter']),
-            new \Twig_SimpleFilter("uncached", [$this, "uncached"]),
+            new TwigFilter("uncached", [$this, "uncached"]),
         ];
     }
 
@@ -95,7 +97,7 @@ final class PluginExtension extends \Twig_Extension implements \Twig_Extension_G
     public function getFunctions(): array
     {
         return [
-            new \Twig_SimpleFunction("link", [$this, "link"]),
+            new TwigFunction("link", [$this, "link"]),
 
         ];
     }
@@ -144,15 +146,15 @@ final class PluginExtension extends \Twig_Extension implements \Twig_Extension_G
     public function getGlobals(): array
     {
 
-        if(!class_exists($this->settings) || !is_subclass_of($this->settings, SettingsBase::class, true))
-            throw new \Exception("A valid Settings class was not found; was Plugin::createSettings() called first?");
+        //if(!class_exists($this->settings) || !is_subclass_of($this->settings, SettingsBase::class, true))
+        //    throw new \Exception("A valid Settings class was not found; was Plugin::createSettings() called first?");
 
-        self::$globals["env"] = Plugin::mode();
-        self::$globals["hostUrl"] = rtrim(constant("{$this->settings}::UCRM_PUBLIC_URL"), "/");
-        self::$globals["baseUrl"] = "/_plugins/" . constant("{$this->settings}::PLUGIN_NAME") . "/public.php";
-        self::$globals["homeRoute"] = "?/";
-        self::$globals["locale"] = Translator::getCurrentLocale();
-        self::$globals["pluginName"] = constant("{$this->settings}::PLUGIN_NAME");
+        //self::$globals["env"] = Plugin::mode();
+        //self::$globals["hostUrl"] = rtrim(constant("{$this->settings}::UCRM_PUBLIC_URL"), "/");
+        //self::$globals["baseUrl"] = "/_plugins/" . constant("{$this->settings}::PLUGIN_NAME") . "/public.php";
+        //self::$globals["homeRoute"] = "?/";
+        //self::$globals["locale"] = Translator::getCurrentLocale();
+        //self::$globals["pluginName"] = constant("{$this->settings}::PLUGIN_NAME");
 
         return [
             "app" => self::$globals,
