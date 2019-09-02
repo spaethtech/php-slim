@@ -38,7 +38,7 @@
 
     {% endif %}
 
-    <pre>{{ link("/test?v=123") }}</pre>
+    <pre>{{ link("#123")|default('MISSING') }}</pre>
 
     <a href="{{ link("/") }}">Visit the Home Page</a>
 </body>
