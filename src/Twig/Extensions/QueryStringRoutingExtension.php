@@ -130,15 +130,16 @@ class QueryStringRoutingExtension extends Extension\AbstractExtension implements
      */
     public function link(string $path, bool $relative = true): string
     {
-        list($path, $query) = explode("?", strpos("?", $path) !== false ? $path : "$path?");
+        // Split the provided path into
+        list($path, $query) = $path !== "" ? explode("?", strpos("?", $path) !== false ? $path : "$path?") : ["", ""];
 
         $baseUrl = self::$globals["app"]["baseUrl"] ?? "";
         $baseScript = self::$globals["app"]["baseScript"] ?? "";
 
-        $path = $path === "/" ? "" : ($baseScript !== "" ? "?" : "")."$path";
+        $path = $path === "/" || $path === "" ? "" : ($baseScript !== "" ? "?" : "")."$path";
 
         $link = $relative ? $baseScript.$path :  $baseUrl.$baseScript.$path;
-        $link .= $query !== "" ? ($baseScript !== "" ? "&" : "?")."$query" : "";
+        $link .= $query !== "" ? ($baseScript !== "" && $path !== "" ? "&" : "?")."$query" : "";
 
         return $link;
     }
