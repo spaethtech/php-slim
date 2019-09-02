@@ -42,7 +42,7 @@ use Slim\Route;
         $app,
         __DIR__."/assets/",
         // NOTE: If one or more Authenticators are provided, they will override the application-level Authenticator(s).
-        new FixedAuthenticator(true)
+        new FixedAuthenticator(false)
     );
 
     // NOTE: This Controller handles any Twig templates...

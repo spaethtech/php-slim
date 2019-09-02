@@ -25,6 +25,7 @@ final class UnauthorizedHandler
             // Setup some debugging information to pass along to the template...
             $data = [
                 "vRoute"        => $request->getAttribute("vRoute"),
+                "vQuery"        => $request->getAttribute("vQuery"),
                 "router"        => $router,
                 "controller"    => $request->getAttribute("route")->getName(),
             ];

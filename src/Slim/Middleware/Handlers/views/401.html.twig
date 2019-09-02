@@ -13,6 +13,8 @@
 
     {# @var \UCRM\Routing\Models\AppGlobals www #}
 
+    {{ app.env }}
+
     {% if app.env == "dev" or app.debug %}
 
         Virtual Route:
@@ -35,6 +37,8 @@
         #}
 
     {% endif %}
+
+    <pre>{{ link("/css/main.css?v=123", false) }}</pre>
 
     <a href="{{ link("/") }}">Visit the Home Page</a>
 </body>

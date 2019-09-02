@@ -3,7 +3,10 @@ declare(strict_types=1);
 
 namespace MVQN\HTTP\Slim\Middleware\Routing;
 
+use MVQN\HTTP\Twig\Extensions\QueryStringRoutingExtension;
 use Psr\Container\ContainerInterface;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use Slim\Http\Uri;
 use Slim\Views\Twig;
 use Twig\Loader\FilesystemLoader;
@@ -23,6 +26,7 @@ class QueryStringRouter
 
     /**
      * @var array Supported file extensions that can be used for automatic lookup.  Prioritized by the provided order!
+     * @deprecated
      */
     protected const AUTO_EXTENSIONS = [ "php", "html", "twig", "html.twig", "jpg", "png", "pdf", "txt", "css", "js" ];
 
@@ -30,7 +34,10 @@ class QueryStringRouter
     // PROPERTIES
     // =================================================================================================================
 
-    /** @var array A collection of paths to search for files when routing. */
+    /**
+     * @var array A collection of paths to search for files when routing.
+     * @deprecated
+     */
     protected $paths;
 
     // =================================================================================================================
@@ -43,6 +50,7 @@ class QueryStringRouter
      * @param string $path The path for which to inspect.
      * @param array $extensions An optional array of supported extensions, ordered for detection priority.
      * @return string|null Returns an automatic path, if the file exists OR NULL if no determination could be made!
+     * @deprecated
      */
     protected function autoExtension(string $path, array $extensions = self::AUTO_EXTENSIONS): ?string
     {
@@ -70,84 +78,108 @@ class QueryStringRouter
     }
 
 
-    public static function extractRouteFromQueryString(string &$queryString, string $defaultRoute = "/index.php"): string
-    {
-        //echo "$queryString\n";
-        $queryString = str_replace("%2F", "/", $queryString);
 
-        $parts = explode("&", $queryString);
 
-        $route = "";
-        $query = [];
 
-        foreach($parts as $part)
-        {
-            if      (strpos($part, "/") === 0)          $route = $part;
-            else if (strpos($part, "route=/") === 0)    $route = str_replace("route=/", "/", $part);
-            else if (strpos($part, "r=/") === 0)        $route = str_replace("r=/", "/", $part);
-            else                                        $query[] = $part;
-        }
 
-        if ($route === "/")
-            $route = $defaultRoute; // "/index.php";
+    /** @var string The default route. */
+    protected $defaultRoute;
 
-        $queryString = implode("&", $query);
+    /** @var array Any optional rewrite rules. */
+    protected $rewriteRules;
 
-        return $route;
-    }
-
-    private $defaultRoute;
-
-    public function __construct(string $defaultRoute = "/") //"/index.php")
-    {
-        $this->defaultRoute = $defaultRoute;
-    }
-
+    /** @var array Any middleware options. */
+    protected $options;
 
     /**
-     * Example middleware invokable class
+     * QueryStringRouter constructor.
      *
-     * @param  \Psr\Http\Message\ServerRequestInterface $request  PSR7 request
-     * @param  \Psr\Http\Message\ResponseInterface      $response PSR7 response
-     * @param  callable                                 $next     Next middleware
+     * @param string $defaultRoute The default route to use when no match is found in the query string.
+     * @param array $rewriteRules Any optional rewrite rules to use on the found route, applied in order.
+     * @param array $options Any options to pass to this middleware.
+     */
+    public function __construct(string $defaultRoute = "/", array $rewriteRules = [], array $options = [])
+    {
+        $this->defaultRoute = $defaultRoute;
+        $this->rewriteRules = $rewriteRules;
+        $this->options = $options;
+
+        QueryStringRoutingExtension::addGlobal("defaultRoute", $defaultRoute);
+    }
+
+    /**
+     * QueryStringRouter middleware as invocable.
      *
-     * @return \Psr\Http\Message\ResponseInterface
+     * @param  ServerRequestInterface $request The current PSR-7 ServerRequest object.
+     * @param  ResponseInterface $response The current PSR-7 Response object.
+     * @param  callable $next The Next middleware.
+     *
+     * @return ResponseInterface Returns a PSR-7 Response object.
      */
     public function __invoke($request, $response, $next)
     {
-        $queryString = isset($_SERVER["QUERY_STRING"]) && $_SERVER["QUERY_STRING"] !== "" ? $_SERVER["QUERY_STRING"] : $this->defaultRoute;   // "/";
+        // Get the current query if set, otherwise set it as the default route only.
+        $queryString = $_SERVER["QUERY_STRING"] ?? $this->defaultRoute;
 
-        /*
-        echo "<pre>";
-        echo var_dump($_SERVER);
-        echo "</pre>";
-        */
+        // Extract (and remove) the route from the query string.
+        $vRoute = $this->extractRouteFromQueryString($queryString, $this->rewriteRules);
 
-        $route = $this->extractRouteFromQueryString($queryString, $this->defaultRoute);
-
-        parse_str($queryString, $query);
+        // Parse the
+        parse_str($queryString, $vQuery);
 
         $uri = $request->getUri()
-            ->withPath($route)
+            ->withPath($vRoute)
             ->withQuery($queryString);
 
         $request = $request
             ->withUri($uri)
-            ->withQueryParams($query)
-            ->withAttribute("vRoute", $route)
-            ->withAttribute("vQuery", $query);
+            ->withQueryParams($vQuery)
+            ->withAttribute("vRoute", $vRoute)
+            ->withAttribute("vQuery", $vQuery);
 
-        /*
-        echo "<pre>";
-        echo var_dump($request);
-        echo "</pre>";
-        */
 
-        $_GET = $query;
+        $_GET = $vQuery;
         $_SERVER["QUERY_STRING"] = $queryString;
 
         $response = $next($request, $response);
 
         return $response;
     }
+
+    public static function extractRouteFromQueryString(string &$queryString, array $rewriteRules = []): string
+    {
+        // NOTE: We use our our parameter parsing here, to make sure things are handled OUR way!
+
+        // Convert any URL encodings back to slashes.
+        $queryString = str_replace("%2F", "/", $queryString);
+
+        // Split the query parameters.
+        $parts = explode("&", $queryString);
+
+        // Set some initialized values.
+        $route = "";
+        $query = [];
+
+        // NOTE: IF multiple route parameters are found, the last one takes precedence!
+
+        // loop through each parameter...
+        foreach($parts as $part)
+        {
+            // IF the parameter starts with "/", THEN assume it's a route.
+            if      (strpos($part, "/") === 0)          $route = $part;
+            // IF the parameter starts with "route=/" OR "r=/", THEN assume it's a route.
+            else if (strpos($part, "route=/") === 0)    $route = str_replace("route=/", "/", $part);
+            else if (strpos($part, "r=/") === 0)        $route = str_replace("r=/", "/", $part);
+            // OTHERWISE, assume it's a normal query parameter.
+            else                                        $query[] = $part;
+        }
+
+        foreach($rewriteRules as $pattern => $replacement)
+            $route = preg_replace($pattern, $replacement, $route);
+
+        $queryString = implode("&", $query);
+
+        return $route;
+    }
+
 }

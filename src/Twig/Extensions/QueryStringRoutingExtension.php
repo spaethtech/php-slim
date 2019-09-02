@@ -19,16 +19,28 @@ use Twig\TwigFunction;
  *
  * @package MVQN\Twig
  * @author Ryan Spaeth <rspaeth@mvqn.net>
- * @final
  */
-final class QueryStringRoutingExtension extends Extension\AbstractExtension implements GlobalsInterface
+class QueryStringRoutingExtension extends Extension\AbstractExtension implements GlobalsInterface
 {
-    /** @var string */
-    private $settings;
+    /** @var array */
+    protected static $globals = [
+        "app" => [
+            // NOTE: Add any desired defaults here...
+            "test3" => "ABC",
+        ]
+    ];
+
+
 
     public function __construct(array $globals = [])
     {
-        self::$globals = $globals;
+        foreach($globals as $key => $value)
+            self::$globals["app"][$key] = $value;
+
+        // NOTE: Add any other global defaults here...
+        //self::$globals["app"]["test"] = false;
+
+        //self::$globals = $globals;
     }
 
 
@@ -37,7 +49,7 @@ final class QueryStringRoutingExtension extends Extension\AbstractExtension impl
      */
     public function getName(): string
     {
-        return "plugin";
+        return "QueryStringRouting";
     }
 
     /**
@@ -45,10 +57,10 @@ final class QueryStringRoutingExtension extends Extension\AbstractExtension impl
      */
     public function getTokenParsers(): array
     {
-        return [
-            //new SwitchTokenParser(),
-        ];
+        return [];
     }
+
+    #region FILTERS
 
     /**
      * @return array
@@ -57,11 +69,16 @@ final class QueryStringRoutingExtension extends Extension\AbstractExtension impl
     {
 
         return [
-            //new \Twig_SimpleFilter('without', [$this, 'withoutFilter']),
             new TwigFilter("uncached", [$this, "uncached"]),
         ];
     }
 
+    /**
+     * @param string $path
+     *
+     * @return string
+     * @throws \Exception
+     */
     public function uncached(string $path)
     {
         $uncachedPath = "";
@@ -90,6 +107,9 @@ final class QueryStringRoutingExtension extends Extension\AbstractExtension impl
         return $uncachedPath;
     }
 
+    #endregion
+
+    #region FUNCTIONS
 
     /**
      * @return array
@@ -104,69 +124,40 @@ final class QueryStringRoutingExtension extends Extension\AbstractExtension impl
 
     /**
      * @param string $path
-     * @param array $query
      * @param bool $relative
      * @return string
      * @throws \Exception
      */
-    public function link(string $path, array $query = [], bool $relative = true): string
+    public function link(string $path, bool $relative = true): string
     {
-        if(!$relative && self::$globals === null)
-            self::getGlobals();
+        list($path, $query) = explode("?", strpos("?", $path) !== false ? $path : "$path?");
 
-        //var_dump(self::$globals);
+        $baseUrl = self::$globals["app"]["baseUrl"] ?? "";
+        $baseScript = self::$globals["app"]["baseScript"] ?? "";
 
-        $link = (!$relative ? self::$globals["hostUrl"].self::$globals["baseUrl"] : "public.php").
-            ($path !== "/" ? "?$path" : "");
+        $path = $path === "/" ? "" : ($baseScript !== "" ? "?" : "")."$path";
 
-        if ($query !== null && $query !== [])
-        {
-            $queryString = "";
-
-            if (Arrays::is_assoc($query))
-                $queryString = http_build_query($query);
-            else
-                $queryString = implode("&", $query);
-
-            $queryString = htmlspecialchars($queryString);
-            $link .= "&$queryString";
-        }
+        $link = $relative ? $baseScript.$path :  $baseUrl.$baseScript.$path;
+        $link .= $query !== "" ? ($baseScript !== "" ? "&" : "?")."$query" : "";
 
         return $link;
     }
 
+    #endregion
 
 
 
 
 
-    /** @var array */
-    protected static $globals;
 
     public function getGlobals(): array
     {
-
-        //if(!class_exists($this->settings) || !is_subclass_of($this->settings, SettingsBase::class, true))
-        //    throw new \Exception("A valid Settings class was not found; was Plugin::createSettings() called first?");
-
-        //self::$globals["env"] = Plugin::mode();
-        //self::$globals["hostUrl"] = rtrim(constant("{$this->settings}::UCRM_PUBLIC_URL"), "/");
-        //self::$globals["baseUrl"] = "/_plugins/" . constant("{$this->settings}::PLUGIN_NAME") . "/public.php";
-        //self::$globals["homeRoute"] = "?/";
-        //self::$globals["locale"] = Translator::getCurrentLocale();
-        //self::$globals["pluginName"] = constant("{$this->settings}::PLUGIN_NAME");
-
-        return [
-            "app" => self::$globals,
-        ];
+        return self::$globals;
     }
 
-    public static function setGlobal(string $name, $value)
+    public static function addGlobal(string $name, $value)
     {
-        if(self::$globals === null)
-            self::$globals = [ $name => $value ];
-
-        self::$globals[$name] = $value;
+        self::$globals["app"][$name] = $value;
     }
 
 }

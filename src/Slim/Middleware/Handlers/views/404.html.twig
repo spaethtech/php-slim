@@ -13,6 +13,8 @@
 
     {# @var \UCRM\Routing\Models\AppGlobals www #}
 
+
+
     {% if app.env == "dev" or app.debug %}
 
         Virtual Route:
@@ -20,11 +22,20 @@
             {{- "    " }}{{ vRoute -}}
         </pre>
 
+        {% if vQuery is not empty and vQuery|length > 0 %}
+        Virtual Query Parameters:
+        <pre style="margin-top:0;">
+        {%- for key, value  in vQuery -%}
+            {{ "    " }}{{ key }} = {{ value }}{{ "\n" }}
+        {%- endfor -%}
+        </pre>
+        {% endif %}
+
         Known Routes:
         <pre style="margin-top:0;">
-            {%- for route in router.getRoutes -%}
-                {{ "    " }}{{ route.getPattern }}{{ "\n" }}
-            {%- endfor -%}
+        {%- for route in router.getRoutes -%}
+            {{ "    " }}{{ route.getPattern }}{{ "\n" }}
+        {%- endfor -%}
         </pre>
 
     {% endif %}
