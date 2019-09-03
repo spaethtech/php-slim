@@ -5,13 +5,14 @@ require_once __DIR__ . "/../vendor/autoload.php";
 require_once __DIR__ . "/bootstrap.php";
 
 use MVQN\HTTP\Slim\Middleware\Authentication\AuthenticationHandler;
-use MVQN\HTTP\Slim\Middleware\Authentication\Authenticators\CallbackAuthenticator;
 use MVQN\HTTP\Slim\Middleware\Authentication\Authenticators\FixedAuthenticator;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
 use MVQN\HTTP\Slim\Controllers;
 use Slim\Route;
+
+
 
 /**
  * Use an immediately invoked function here, to avoid global namespace pollution...
@@ -42,7 +43,7 @@ use Slim\Route;
         $app,
         __DIR__."/assets/",
         // NOTE: If one or more Authenticators are provided, they will override the application-level Authenticator(s).
-        new FixedAuthenticator(false)
+        new FixedAuthenticator(true)
     );
 
     // NOTE: This Controller handles any Twig templates...
@@ -69,10 +70,10 @@ use Slim\Route;
         function ( /** @noinspection PhpUnusedParameterInspection */ Request $request, Response $response, array $args)
         {
             // NOTE: Inside any route closure, $this refers to the Application's Container.
-            return $response->write(file_get_contents(__DIR__ . "/index.html"));
+            return $response->write(file_get_contents(__DIR__ . "/assets/index.html"));
         }
 
-    );
+    );//->add(new AuthenticationHandler($container))->add(new TestsAuthenticator());
 
     // Custom route using an inline method...
     // NOTE: Notice this more specific route takes precedence over the previous /example route.
@@ -85,6 +86,29 @@ use Slim\Route;
         }
 
     )->add(new AuthenticationHandler($container))->add(new FixedAuthenticator(true));
+
+
+
+
+    $app->get("/authorized",
+
+        function ( /** @noinspection PhpUnusedParameterInspection */ Request $request, Response $response, array $args)
+        {
+            // NOTE: Inside any route closure, $this refers to the Application's Container.
+            return $response->write("This content should ALWAYS be displayed!");
+        }
+
+    )->add(new AuthenticationHandler($container))->add(new FixedAuthenticator(true));
+
+    $app->get("/unauthorized",
+
+        function ( /** @noinspection PhpUnusedParameterInspection */ Request $request, Response $response, array $args)
+        {
+            // NOTE: Inside any route closure, $this refers to the Application's Container.
+            return $response->write("This content should NEVER be displayed!");
+        }
+
+    )->add(new AuthenticationHandler($container))->add(new FixedAuthenticator(false));
 
     // =================================================================================================================
     // APPLICATION EXECUTION

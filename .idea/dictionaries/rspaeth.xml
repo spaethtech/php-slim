@@ -2,10 +2,14 @@
   <dictionary name="rspaeth">
     <words>
       <w>fontobject</w>
+      <w>guzzlehttp</w>
       <w>mvqn</w>
       <w>opentype</w>
+      <w>phpdotenv</w>
+      <w>rspaeth</w>
       <w>sfnt</w>
       <w>spaeth</w>
+      <w>vlucas</w>
       <w>woff</w>
     </words>
   </dictionary>
