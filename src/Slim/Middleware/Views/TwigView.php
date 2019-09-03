@@ -60,13 +60,13 @@ final class TwigView
                 // IF the path does not exist OR is not a directory, THEN throw an Exception!
                 if(!$real || !is_dir($real))
                     continue;
-                    /*
-                    throw new InvalidTemplatePathException(
-                        "\n".
-                        "Invalid Twig template path provided:\n".
-                        "    '$path'\n".
-                        "    Make sure the path exists and is a directory!\n");
-                    */
+                /*
+                throw new InvalidTemplatePathException(
+                    "\n".
+                    "Invalid Twig template path provided:\n".
+                    "    '$path'\n".
+                    "    Make sure the path exists and is a directory!\n");
+                */
 
                 // OTHERWISE, add it to the list of template paths.
                 $this->paths[] = $real;
@@ -93,9 +93,10 @@ final class TwigView
 
             // IF the path does not exist, THEN throw an Exception!
             if(!$real)
-                throw new InvalidTemplatePathException(
-                    "\n".
-                    "No valid template paths were provided and auto-detection of path '$path' was also invalid!\n");
+                //throw new InvalidTemplatePathException(
+                //    "\n".
+                //    "No valid template paths were provided and auto-detection of path '$path' was also invalid!\n");
+                mkdir($path, 0775, true);
 
             // OTHERWISE, add the auto-detected path!
             $this->paths = [ $real ];

@@ -34,6 +34,5 @@ $app = new DefaultApp([
 // NOTE: We can add additional global values at any time, but they will be overwritten by duplicates passed above!
 //QueryStringRoutingExtension::addGlobal("baseScript", "/index.php");
 
-
 $app->add(new FixedAuthenticator(false));
 $app->add(new QueryStringRouter("/", ["#/public/#" => "/"]));
