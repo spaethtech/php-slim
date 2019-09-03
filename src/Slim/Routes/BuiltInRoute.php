@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace MVQN\HTTP\Slim\Controllers;
+namespace MVQN\HTTP\Slim\Routes;
 
 use Slim\App;
 use Slim\Interfaces\RouteInterface;

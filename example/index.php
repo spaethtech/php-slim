@@ -9,7 +9,7 @@ use MVQN\HTTP\Slim\Middleware\Authentication\Authenticators\FixedAuthenticator;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
-use MVQN\HTTP\Slim\Controllers;
+use MVQN\HTTP\Slim\Routes;
 use Slim\Route;
 
 
@@ -39,14 +39,14 @@ use Slim\Route;
     // =================================================================================================================
 
     // NOTE: This Controller handles any static assets (i.e. png, jpg, html, pdf, etc.)...
-    (new Controllers\AssetRoute(
+    (new Routes\AssetRoute(
         $app,
         __DIR__."/assets/",
         // NOTE: If one or more Authenticators are provided, they will override the application-level Authenticator(s).
     ))->add(new AuthenticationHandler($container))->add(new FixedAuthenticator(true));
 
     // NOTE: This Controller handles any Twig templates...
-    (new Controllers\TemplateRoute(
+    (new Routes\TemplateRoute(
         $app,
         __DIR__."/views/",
         // NOTE: Here we can declare null to remove any Authenticator(s), including application-level Authenticator(s).
@@ -54,7 +54,7 @@ use Slim\Route;
     ));
 
     // NOTE: This Controller handles any PHP scripts...
-    (new Controllers\ScriptRoute(
+    (new Routes\ScriptRoute(
         $app,
         __DIR__."/src/"
         // NOTE: Or simply omit the parameter to use any application-level Authenticator(s).
