@@ -22,7 +22,7 @@ use Slim\Http\Response;
  * @author Ryan Spaeth <rspaeth@mvqn.net>
  * @final
  */
-final class AssetController
+final class AssetRoute extends BuiltInRoute
 {
     /**
      * AssetController constructor.
@@ -31,9 +31,9 @@ final class AssetController
      * @param string $path
      * @param Authenticator[]|Authenticator|null $authenticators
      */
-    public function __construct(App $app, string $path, $authenticators = null)
+    public function __construct(App $app, string $path)//, $authenticators = null)
     {
-        $route = $app->get("/{file:.+}.{ext:jpg|png|pdf|txt|css|js|htm|html|svg|ttf|woff|woff2}",
+        $this->route = $app->get("/{file:.+}.{ext:jpg|png|pdf|txt|css|js|htm|html|svg|ttf|woff|woff2}",
             function (Request $request, Response $response, array $args) use ($app, $path)
             {
                 // Get the file and extension from the matched route.
@@ -92,8 +92,9 @@ final class AssetController
                 // Then return the response!
                 return $response;
             }
-        )->setName(AssetController::class);
+        )->setName(AssetRoute::class);
 
+        /*
         if($authenticators !== null)
         {
             // NOTE: However, outside the route closure, $this refers to the current object like usual!
@@ -108,6 +109,7 @@ final class AssetController
                     $route->add($authenticator);
             }
         }
+        */
     }
 
 }

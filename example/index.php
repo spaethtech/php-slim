@@ -39,27 +39,26 @@ use Slim\Route;
     // =================================================================================================================
 
     // NOTE: This Controller handles any static assets (i.e. png, jpg, html, pdf, etc.)...
-    new Controllers\AssetController(
+    (new Controllers\AssetRoute(
         $app,
         __DIR__."/assets/",
         // NOTE: If one or more Authenticators are provided, they will override the application-level Authenticator(s).
-        new FixedAuthenticator(true)
-    );
+    ))->add(new AuthenticationHandler($container))->add(new FixedAuthenticator(true));
 
     // NOTE: This Controller handles any Twig templates...
-    new Controllers\TemplateController(
+    (new Controllers\TemplateRoute(
         $app,
         __DIR__."/views/",
         // NOTE: Here we can declare null to remove any Authenticator(s), including application-level Authenticator(s).
-        null
-    );
+        //null
+    ));
 
     // NOTE: This Controller handles any PHP scripts...
-    new Controllers\ScriptController(
+    (new Controllers\ScriptRoute(
         $app,
         __DIR__."/src/"
         // NOTE: Or simply omit the parameter to use any application-level Authenticator(s).
-    );
+    ));
 
 
 
