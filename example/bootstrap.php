@@ -13,6 +13,11 @@ use Slim\Views\Twig;
 /** @noinspection PhpUnhandledExceptionInspection */
 $app = new DefaultApp([
 
+    "settings" => [
+        // NOTE: Here we enable Slim's extra error details when in development mode.
+        "displayErrorDetails" => true,
+    ],
+
     // NOTE: We add the Twig instance here, as we need to set some values that will not be common to all applications!
     "twig" =>  new TwigView(
         // NOTE: This can be either a single path to the Templates or an array of multiple paths.
