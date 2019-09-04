@@ -6,15 +6,16 @@ namespace MVQN\HTTP\Slim\Middleware\Handlers;
 use Slim\Container;
 use Slim\Http\Request;
 use Slim\Http\Response;
+use Slim\Route;
 use Slim\Router;
 use Slim\Views\Twig;
 
-final class UnauthorizedHandler
+final class MethodNotAllowedHandler
 {
 
     public function __invoke(Container $container)
     {
-        return function(Request $request, Response $response) use ($container): Response
+        return function(Request $request, Response $response, array $methods) use ($container): Response
         {
             /** @var Router $router */
             $router = $container->get("router");
@@ -24,18 +25,17 @@ final class UnauthorizedHandler
 
             // Setup some debugging information to pass along to the template...
             $data = [
-                "vRoute"        => $request->getAttribute("vRoute"),
-                "vQuery"        => $request->getAttribute("vQuery"),
-                "router"        => $router,
-                "controller"    => $request->getAttribute("route")->getName(),
-                "authenticator" => $request->getAttribute("authenticator"),
+                "vRoute" => $request->getAttribute("vRoute"),
+                "vQuery" => $request->getAttribute("vQuery"),
+                "router" => $router,
+                "methods" => $methods,
             ];
 
             // Load and parse our default template, using the above data.
-            $template = $twig->fetchFromString(file_get_contents(__DIR__."/views/401.html.twig"), $data);
+            $template = $twig->fetchFromString(file_get_contents(__DIR__."/views/405.html.twig"), $data);
 
             // Set the appropriate headers and append the template to the response body.
-            $response = $response->withStatus(401)->write($template);
+            $response = $response->withStatus(405)->write($template);
 
             // Finally, return the response!
             return $response;

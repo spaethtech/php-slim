@@ -1,45 +1,116 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
     <meta charset="UTF-8">
-    <title>Page Not Found</title>
+    <title>Not Found</title>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 30px;
+            font: 12px/1.5 Helvetica,Arial,Verdana,sans-serif;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 4em;
+            font-weight: normal;
+            line-height: 1.0;
+        }
+
+        p {
+            text-align: justify;
+        }
+
+        h4 {
+            margin-top: 1em;
+            margin-bottom: 0;
+        }
+
+        a {
+            display: inline-block;
+            background-color: #007bff;
+            padding: 0.75em 1.5em;
+            border-radius: 0.5em;
+            text-decoration: none;
+            transition: background-color 0.25s ease;
+            color: white;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+
+        a:hover {
+            background-color: #6610f2;
+        }
+
+        ul {
+            margin-top: 0;
+            margin-bottom: 1em;
+            padding-left: 2em;
+            list-style: none;
+            font-family: monospace;
+        }
+
+        li {
+        }
+
+        .badge {
+            background: gray;
+            margin-left: 0.5em;
+            padding: 0.125em 0.5em;
+            border-radius: 0.625em;
+            font-weight: bold;
+            text-transform: uppercase;
+            color: white;
+            font-size: 0.825em;
+        }
+    </style>
+
 </head>
-<body style="margin:0; padding:30px; font:12px/1.5 Helvetica,Arial,Verdana,sans-serif;">
-    <h1 style="margin:0; font-size:48px; font-weight:normal; line-height:48px;">Page Not Found</h1>
-    <p style="text-align:justify;">
-        The page you are looking for could not be found. Check the address bar to ensure your URL is spelled correctly.
-        If all else fails, you can visit the Plugin's home page at the link below.
-    </p>
+<body>
 
-    {# @var \UCRM\Routing\Models\AppGlobals www #}
+    <h1>Not Found</h1>
 
+    <p>The page you are looking for could not be found.</p>
 
+    {% if app.debug %}
 
-    {% if app.env == "dev" or app.debug %}
+        <h4>Virtual Route:</h4>
+        <ul>
+            <li>{{ vRoute }}</li>
+        </ul>
 
-        Virtual Route:
-        <pre style="margin-top:0;">
-            {{- "    " }}{{ vRoute -}}
-        </pre>
-
-        {% if vQuery is not empty and vQuery|length > 0 %}
-        Virtual Query Parameters:
-        <pre style="margin-top:0;">
-        {%- for key, value  in vQuery -%}
-            {{ "    " }}{{ key }} = {{ value }}{{ "\n" }}
-        {%- endfor -%}
-        </pre>
+        {% if vQuery is not empty %}
+            <h4>Virtual Query Parameters:</h4>
+            <ul>
+            {%- for key, value  in vQuery -%}
+                <li>{{ key }} = {{ value }}</li>
+            {% endfor %}
+            </ul>
         {% endif %}
 
-        Known Routes:
-        <pre style="margin-top:0;">
-        {%- for route in router.getRoutes -%}
-            {{ "    " }}{{ route.getPattern }}{{ "\n" }}
-        {%- endfor -%}
-        </pre>
+        {% if router.getRoutes is not empty %}
+            <h4>Known Routes:</h4>
+            <div class="mb-4 px-4">
+                <ul>
+                    {%- for route in router.getRoutes -%}
+                    <li>
+                        <span>{{ route.getPattern }}</span>
+                        {%- for method in route.getMethods -%}
+                        <span class="badge">
+                        {{- method -}}
+                    </span>
+                        {%- endfor -%}
+                    </li>
+                    {%- endfor -%}
+                </ul>
+            </div>
+        {% endif %}
 
     {% endif %}
 
-    <a href="{{ link("/") }}">Visit the Home Page</a>
+    <a href="{{ link("/") }}">{{ "Home Page" }}</a>
+
 </body>
 </html>

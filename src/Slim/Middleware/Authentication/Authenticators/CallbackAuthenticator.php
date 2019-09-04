@@ -44,7 +44,10 @@ class CallbackAuthenticator extends Authenticator
     {
         $result = ($this->authenticator)($request, $response);
 
-        $request = $request->withAttribute("authenticated", $result);
+        $request = $request
+            ->withAttribute("authenticator", get_class($this))
+            ->withAttribute("authenticated", $result);
+
         return $next($request, $response);
     }
 }

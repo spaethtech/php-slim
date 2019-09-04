@@ -36,7 +36,10 @@ class FixedAuthenticator extends Authenticator
      */
     public function __invoke(Request $request, Response $response, callable $next): Response
     {
-        $request = $request->withAttribute("authenticated", $this->fixed);
+        $request = $request
+            ->withAttribute("authenticator", get_class($this))
+            ->withAttribute("authenticated", $this->fixed);
+
         return $next($request, $response);
     }
 }

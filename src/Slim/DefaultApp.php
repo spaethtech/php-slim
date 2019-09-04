@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace MVQN\HTTP\Slim;
 
+use MVQN\HTTP\Slim\Middleware\Handlers\MethodNotAllowedHandler;
 use MVQN\HTTP\Slim\Middleware\Handlers\NotFoundHandler;
 use MVQN\HTTP\Slim\Middleware\Handlers\UnauthorizedHandler;
 use MVQN\HTTP\Slim\Middleware\Views\TwigView;
@@ -24,6 +25,7 @@ class DefaultApp extends App
             //"twig" => new TwigView(__DIR__."/views/"),
 
             "notFoundHandler" => new NotFoundHandler(),
+            "notAllowedHandler" => new MethodNotAllowedHandler(),
             "unauthorizedHandler" => new UnauthorizedHandler(),
         ];
 

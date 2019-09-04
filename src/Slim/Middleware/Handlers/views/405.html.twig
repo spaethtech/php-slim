@@ -3,7 +3,7 @@
 <head>
 
     <meta charset="UTF-8">
-    <title>Unauthorized</title>
+    <title>Method Not Allowed</title>
 
     <style>
         body {
@@ -69,27 +69,14 @@
 
 </head>
 <body>
-
-    <h1>Unauthorzied</h1>
-    <p style="text-align:justify;">
-        You are not authorized to view this page.
-    </p>
+    <h1>Method Not Allowed</h1>
+    <p>The current HTTP method/verb is not support by this endpoint.</p>
 
     {% if app.debug %}
-
         <h4>Virtual Route:</h4>
         <ul>
             <li>{{ vRoute }}</li>
         </ul>
-
-        {% if vQuery is not empty %}
-            <h4>Virtual Query Parameters:</h4>
-            <ul>
-                {%- for key, value  in vQuery -%}
-                    <li>{{ key }} = {{ value }}</li>
-                {% endfor %}
-            </ul>
-        {% endif %}
 
         {% if controller %}
             <h4>Controller:</h4>
@@ -98,13 +85,12 @@
             </ul>
         {% endif %}
 
-        {% if authenticator %}
-            <h4>Using Authenticator:</h4>
-            <ul>
-                <li>{{ authenticator }}</li>
-            </ul>
-        {% endif %}
-
+        <h4>Supported Methods:</h4>
+        <ul>
+        {% for method in methods %}
+            <li>{{ method }}</li>
+        {% endfor %}
+        </ul>
     {% endif %}
 
     <a href="{{ link("/") }}">{{ "Home Page" }}</a>
