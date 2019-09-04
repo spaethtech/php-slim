@@ -69,31 +69,31 @@
 
 </head>
 <body>
-    <h1>Method Not Allowed</h1>
-    <p>The current HTTP method/verb is not support by this endpoint.</p>
+<h1>Method Not Allowed</h1>
+<p>The current HTTP method/verb is not support by this endpoint.</p>
 
-    {% if app.debug %}
-        <h4>Virtual Route:</h4>
+{% if app.debug %}
+    <h4>Virtual Route:</h4>
+    <ul>
+        <li>{{ vRoute }}</li>
+    </ul>
+
+    {% if controller %}
+        <h4>Controller:</h4>
         <ul>
-            <li>{{ vRoute }}</li>
-        </ul>
-
-        {% if controller %}
-            <h4>Controller:</h4>
-            <ul>
-                <li>{{ controller }}</li>
-            </ul>
-        {% endif %}
-
-        <h4>Supported Methods:</h4>
-        <ul>
-        {% for method in methods %}
-            <li>{{ method }}</li>
-        {% endfor %}
+            <li>{{ controller }}</li>
         </ul>
     {% endif %}
 
-    <a href="{{ link("/") }}">{{ "Home Page" }}</a>
+    <h4>Supported Methods:</h4>
+    <ul>
+        {% for method in methods %}
+            <li>{{ method }}</li>
+        {% endfor %}
+    </ul>
+{% endif %}
+
+<a href="{{ link("/") }}">{{ "Home Page" }}</a>
 
 </body>
 </html>
