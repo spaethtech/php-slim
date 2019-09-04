@@ -17,7 +17,7 @@ class DefaultApp extends App
     {
         $defaults = [
             "settings" => [
-                "displayErrorDetails" => true,
+                //"displayErrorDetails" => false, // Defaults to FALSE
                 "addContentLengthHeader" => false,
                 "determineRouteBeforeAppMiddleware" => true,
             ],
