@@ -2,42 +2,66 @@
 declare(strict_types=1);
 require_once __DIR__ . "/../vendor/autoload.php";
 
-use MVQN\HTTP\Slim\DefaultApp;
-use MVQN\HTTP\Slim\Middleware\Views\TwigView;
+use DI\Container;
+use MVQN\Slim\Middleware\Authentication\AuthenticationHandler;
+use Slim\Factory\AppFactory;
+use MVQN\Slim\Middleware\Routing\QueryStringRouter;
+use MVQN\Slim\Middleware\Authentication\Authenticators\FixedAuthenticator;
 
-use MVQN\HTTP\Slim\Middleware\Authentication\Authenticators\FixedAuthenticator;
-use MVQN\HTTP\Slim\Middleware\Routing\QueryStringRouter;
-use MVQN\HTTP\Twig\Extensions\QueryStringRoutingExtension;
+use Slim\Exception\HttpMethodNotAllowedException;
+use Slim\Exception\HttpNotFoundException;
+use Slim\Exception\HttpUnauthorizedException;
+use MVQN\Slim\Middleware\Handlers\MethodNotAllowedHandler;
+use MVQN\Slim\Middleware\Handlers\NotFoundHandler;
+use MVQN\Slim\Middleware\Handlers\UnauthorizedHandler;
+
 use Slim\Views\Twig;
+use Slim\Views\TwigMiddleware;
 
-/** @noinspection PhpUnhandledExceptionInspection */
-$app = new DefaultApp([
 
-    "settings" => [
-        // NOTE: Here we enable Slim's extra error details when in development mode.
-        "displayErrorDetails" => true,
-    ],
+AppFactory::setContainer($container = new Container());
+$app = AppFactory::create();
 
-    // NOTE: We add the Twig instance here, as we need to set some values that will not be common to all applications!
-    "twig" =>  new TwigView(
-        // NOTE: This can be either a single path to the Templates or an array of multiple paths.
-        __DIR__."/views/",
+// Necessary for injection of the base App, as a ResponseFactory is required to function properly.
+$container->set(\Psr\Http\Message\ResponseFactoryInterface::class, DI\create(\Slim\Psr7\Factory\ResponseFactory::class));
 
-        // NOTE: Pass any desired options to be used during the initialization of the Twig Environment.
-        [ "debug" => true ],
+// Add Routing Middleware.
+$app->addRoutingMiddleware();
 
-        // NOTE: Include any desired global values, which will be added to the "app.<name>" variable in Twig templates.
-        [
-            "baseUrl" => "http://localhost",
-            "baseScript" => "/index.php",
-        ]
-    ),
-
-    // NOTE: Add additional (or override) dependencies to the Container here...
-]);
-
-// NOTE: We can add additional global values at any time, but they will be overwritten by duplicates passed above!
-//QueryStringRoutingExtension::addGlobal("baseScript", "/index.php");
-
+// Add an application-level Authenticator.
 $app->add(new FixedAuthenticator(false));
+
+
+
+
+$container->set("twig" /* Twig::class */, function() {
+    return Twig::create([ realpath(__DIR__."/views/") ], [ "cache" => realpath(__DIR__."/views/.cache/") ]);
+});
+
+TwigMiddleware::createFromContainer($app, "twig");//, Twig::class);
+
+
+
+
+
 $app->add(new QueryStringRouter("/", ["#/public/#" => "/"]));
+
+
+
+
+
+
+/**
+ * Add Error Handling Middleware
+ *
+ * @param bool $displayErrorDetails Should be set to false in production
+ * @param bool $logErrors Parameter is passed to the default ErrorHandler
+ * @param bool $logErrorDetails Display error details in error log which can be replaced by a callable of your choice.
+
+ * Note: This middleware should be added last, as it will not handle any exceptions/errors for anything added after it!
+ */
+$errorMiddleware = $app->addErrorMiddleware(true, true, true);
+$errorMiddleware->setErrorHandler(HttpUnauthorizedException::class, new UnauthorizedHandler($app)); // 401
+$errorMiddleware->setErrorHandler(HttpNotFoundException::class, new NotFoundHandler($app)); // 404
+$errorMiddleware->setErrorHandler(HttpMethodNotAllowedException::class, new MethodNotAllowedHandler($app)); // 405
+

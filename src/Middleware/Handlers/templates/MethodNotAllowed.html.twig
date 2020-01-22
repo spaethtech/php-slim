@@ -1,0 +1,42 @@
+{% extends "Error.twig" %}
+
+{% set title = "Method Not Allowed" %}
+
+{% block message %}
+    <p>The current HTTP method/verb is not support by this endpoint.</p>
+{% endblock %}
+
+{% block content %}
+    <h4>Virtual Route:</h4>
+    <ul>
+        <li>{{ vRoute }}</li>
+    </ul>
+
+    {% if vQuery %}
+    <h4>Virtual Query Parameters:</h4>
+    <ul>
+        {% for key, value in vQuery %}
+        <li>{{ key }} = {{ value }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+    {% if methods %}
+    <h4>Supported Methods:</h4>
+    <ul>
+        <li>
+            {% for method in methods %}
+            <span class="badge">{{ method }}</span>
+            {% endfor %}
+        </li>
+    </ul>
+    {% endif %}
+
+    {% if authenticator %}
+    <h4>Using Authenticator:</h4>
+    <ul>
+        <li>{{ authenticator }}</li>
+    </ul>
+    {% endif %}
+
+{% endblock %}
