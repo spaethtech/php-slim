@@ -7,6 +7,7 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Container\ContainerInterface as Container;
 use Slim\App;
+use Slim\Exception\HttpNotFoundException;
 
 /**
  * Class ScriptController
@@ -42,9 +43,10 @@ final class ScriptRoute extends BuiltInRoute
                 {
                     // Assemble some standard data to send along to the 404 page for debugging!
                     $data = [
-                        "route" => $request->getAttribute("vRoute"),
-                        "query" => $request->getAttribute("vQuery"),
-                        "user"  => $request->getAttribute("user"),
+                        //"route" => $request->getAttribute("vRoute"),
+                        //"query" => $request->getAttribute("vQuery"),
+                        //"user"  => $request->getAttribute("user"),
+                        "attributes" => $request->getAttributes(),
                     ];
 
                     // NOTE: Inside any route closure, $this refers to the Application's Container.
@@ -52,7 +54,8 @@ final class ScriptRoute extends BuiltInRoute
                     $container = $this;
 
                     // Return the default 404 page!
-                    return $container->get("notFoundHandler")($request, $response, $data);
+                    //return $container->get("notFoundHandler")($request, $response, $data);
+                    throw new HttpNotFoundException($request);
                 }
 
                 /** @noinspection PhpIncludeInspection */
