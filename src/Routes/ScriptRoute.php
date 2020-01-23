@@ -65,22 +65,6 @@ final class ScriptRoute extends BuiltInRoute
             }
         )->setName(ScriptRoute::class);
 
-        /*
-        if($authenticators !== null)
-        {
-            // NOTE: However, outside the route closure, $this refers to the current object like usual!
-            $route->add(new AuthenticationHandler($app->getContainer()));
-
-            if(!is_array($authenticators))
-                $authenticators = [ $authenticators ];
-
-            foreach($authenticators as $authenticator)
-            {
-                if(is_a($authenticator, Authenticator::class))
-                    $route->add($authenticator);
-            }
-        }
-        */
     }
 
 }

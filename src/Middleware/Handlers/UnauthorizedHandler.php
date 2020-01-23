@@ -40,7 +40,10 @@ final class UnauthorizedHandler extends ErrorHandler
         ];
 
         $response = $this->app->getResponseFactory()->createResponse(401);
-        return $this->render($response, "Unauthorized.html.twig", $data);
+        //return $this->render($response, "401.html.twig", $data);
+
+
+        return $this->render($response, __DIR__."/templates/401.php", $data);
     }
 
 }

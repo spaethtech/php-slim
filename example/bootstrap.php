@@ -15,8 +15,8 @@ use MVQN\Slim\Middleware\Handlers\MethodNotAllowedHandler;
 use MVQN\Slim\Middleware\Handlers\NotFoundHandler;
 use MVQN\Slim\Middleware\Handlers\UnauthorizedHandler;
 
-use Slim\Views\Twig;
-use Slim\Views\TwigMiddleware;
+//use Slim\Views\Twig;
+//use Slim\Views\TwigMiddleware;
 
 
 AppFactory::setContainer($container = new Container());
@@ -29,18 +29,24 @@ $container->set(\Psr\Http\Message\ResponseFactoryInterface::class, DI\create(\Sl
 $app->addRoutingMiddleware();
 
 // Add an application-level Authenticator.
-$app->add(new FixedAuthenticator(false));
+$app->add(new FixedAuthenticator(true));
 
 
 
+/*
+$container->set("twig", function() {
 
-$container->set("twig" /* Twig::class */, function() {
-    return Twig::create([ realpath(__DIR__."/views/") ], [ "cache" => realpath(__DIR__."/views/.cache/") ]);
+    //$twig = new \Twig\Environment(new \Twig\Loader\FilesystemLoader([ realpath(__DIR__."/views/") ]),[ "cache" => realpath(__DIR__."/views/.cache/") ]);
+    $twig = Twig::create([ realpath(__DIR__."/views/") ], [ "cache" => realpath(__DIR__."/views/.cache/") ]);
+
+
+    $twig->getEnvironment()->addGlobal("home", "/index.php");
+
+    return $twig;
 });
 
 TwigMiddleware::createFromContainer($app, "twig");//, Twig::class);
-
-
+*/
 
 
 

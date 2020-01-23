@@ -9,8 +9,6 @@ use Psr\Container\ContainerInterface as Container;
 
 use Slim\App;
 
-
-
 /**
  * Class AssetController
  *

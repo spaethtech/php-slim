@@ -31,7 +31,7 @@ use Psr\Http\Message\ServerRequestInterface as Request;
     // NOTE: This Controller handles any Twig templates...
     (new TemplateRoute($app, __DIR__."/views/", "twig"))
         ->add(new AuthenticationHandler($app))
-        ->add(new FixedAuthenticator(false))
+        //->add(new FixedAuthenticator(false))
         ->add(new FixedAuthenticator(true));
 
     // NOTE: This Controller handles any PHP scripts...

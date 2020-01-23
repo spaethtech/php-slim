@@ -39,6 +39,7 @@ abstract class ErrorHandler
         $this->app = $app;
     }
 
+    /*
     protected function render(Response $response, string $template, array $data = []): Response
     {
         if (!self::$twig)
@@ -70,6 +71,26 @@ abstract class ErrorHandler
             //$response = $response->withStatus(500);
             //$response->getBody()->write("Failed to load Twig templates from file system.");
         }
+
+        return $response;
+    }
+    */
+
+    /**
+     * @param Response $response
+     * @param string $path
+     * @param array $data
+     * @return Response
+     *
+     * @noinspection PhpIncludeInspection
+     */
+    protected function render(Response $response, string $path, array $data = []): Response
+    {
+        ob_start();
+        include($path);
+        $template = ob_get_clean();
+
+        $response->getBody()->write($template);
 
         return $response;
     }

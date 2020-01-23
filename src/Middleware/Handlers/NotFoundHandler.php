@@ -36,7 +36,8 @@ final class NotFoundHandler extends ErrorHandler
         ];
 
         $response = $this->app->getResponseFactory()->createResponse(404);
-        return $this->render($response, "NotFound.html.twig", $data);
+        //return $this->render($response, "404.html.twig", $data);
+        return $this->render($response, __DIR__."/templates/404.php", $data);
     }
 
 }

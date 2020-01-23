@@ -39,7 +39,8 @@ final class MethodNotAllowedHandler extends ErrorHandler
         ];
 
         $response = $this->app->getResponseFactory()->createResponse(405);
-        return $this->render($response, "MethodNotAllowed.html.twig", $data);
+        //return $this->render($response, "405.html.twig", $data);
+        return $this->render($response, __DIR__."/templates/405.php", $data);
     }
 
 }
