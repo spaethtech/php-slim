@@ -6,7 +6,7 @@ require_once __DIR__ . "/bootstrap.php";
 use MVQN\Slim\Middleware\Authentication\AuthenticationHandler;
 use MVQN\Slim\Middleware\Authentication\Authenticators\CallbackAuthenticator;
 use MVQN\Slim\Middleware\Authentication\Authenticators\FixedAuthenticator;
-use MVQN\Slim\Responses\JsonResponse;
+use MVQN\Slim\Psr7\JsonResponse;
 use MVQN\Slim\Routes\AssetRoute;
 use MVQN\Slim\Routes\ScriptRoute;
 use Psr\Http\Message\ResponseInterface as Response;
