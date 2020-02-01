@@ -20,13 +20,11 @@ class CallbackAuthenticator extends Authenticator
 
     /**
      * @param Closure $authenticator
-     *
-     * @throws Exceptions\InvalidCallbackException
      */
     public function __construct(Closure $authenticator)
     {
-        if ($authenticator !== null && !is_callable($authenticator))
-            throw new Exceptions\InvalidCallbackException("The provided callback is non-callable!");
+        //if ($authenticator !== null && !is_callable($authenticator))
+        //    throw new Exceptions\InvalidCallbackException("The provided callback is non-callable!");
 
         $this->authenticator = $authenticator;
     }
