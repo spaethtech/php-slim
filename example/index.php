@@ -6,9 +6,9 @@ require_once __DIR__ . "/bootstrap.php";
 use MVQN\Slim\Middleware\Authentication\AuthenticationHandler;
 use MVQN\Slim\Middleware\Authentication\Authenticators\CallbackAuthenticator;
 use MVQN\Slim\Middleware\Authentication\Authenticators\FixedAuthenticator;
+use MVQN\Slim\Responses\JsonResponse;
 use MVQN\Slim\Routes\AssetRoute;
 use MVQN\Slim\Routes\ScriptRoute;
-use MVQN\Slim\Routes\TemplateRoute;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
@@ -28,12 +28,6 @@ use Psr\Http\Message\ServerRequestInterface as Request;
         //->add(new AuthenticationHandler($app))
         //->add(new FixedAuthenticator(true));
 
-    // NOTE: This Controller handles any Twig templates...
-    (new TemplateRoute($app, __DIR__."/views/", "twig"))
-        ->add(new AuthenticationHandler($app))
-        //->add(new FixedAuthenticator(false))
-        ->add(new FixedAuthenticator(true));
-
     // NOTE: This Controller handles any PHP scripts...
     (new ScriptRoute($app, __DIR__."/src/"));
 
@@ -42,16 +36,18 @@ use Psr\Http\Message\ServerRequestInterface as Request;
     // Define app routes
     $app->get('/hello/{name}', function (Request $request, Response $response, $args): Response {
         $name = $args['name'];
-        $response->getBody()->write("Hello, $name");
+        //$response->getBody()->write("Hello, $name");
         //var_dump($request->getAttributes());
-        return $response;
+        //return $response;
+        return JsonResponse::fromResponse($response, [ "name" => $name, "message" => "This is a JSON test!" ]);
+
     })
         ->add(new AuthenticationHandler($app))
         ->add(new CallbackAuthenticator(
             function(Request $request): bool
             {
                 //var_dump($request);
-                return false;
+                return true;
             }
         ));
 
