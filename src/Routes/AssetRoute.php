@@ -5,7 +5,6 @@ namespace MVQN\Slim\Routes;
 
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
-use Psr\Container\ContainerInterface as Container;
 
 use Slim\App;
 use Slim\Exception\HttpNotFoundException;
@@ -13,9 +12,9 @@ use Slim\Exception\HttpNotFoundException;
 /**
  * Class AssetController
  *
- * Handles routing and provision of static assets.
+ * Handles routing and response of static assets.
  *
- * @package UCRM\Slim\Controllers\Common
+ * @package MVQN\Slim\Routes
  * @author Ryan Spaeth <rspaeth@mvqn.net>
  * @final
  */
@@ -44,21 +43,7 @@ final class AssetRoute extends BuiltInRoute
                 // IF the static asset file does not exist, THEN return a HTTP 404!
                 if(!$path)
                 {
-                    // Assemble some standard data to send along to the 404 page for debugging!
-                    $data = [
-                        //"route" => $request->getAttribute("vRoute"),
-                        //"query" => $request->getAttribute("vQuery"),
-                        //"user"  => $request->getAttribute("user"),
-                        "attributes" => $request->getAttributes(),
-                    ];
-
-                    // NOTE: Inside any route closure, $this refers to the Application's Container.
-                    /** @var Container $container */
-                    $container = $this;
-
                     // Return the default 404 page!
-                    //return $container->get("notFoundHandler")($request, $response, $data);
-                    //return $response->withStatus(404, "Asset '$file.$ext' not found!");
                     throw new HttpNotFoundException($request);
                 }
 
@@ -93,22 +78,6 @@ final class AssetRoute extends BuiltInRoute
             }
         )->setName(AssetRoute::class);
 
-        /*
-        if($authenticators !== null)
-        {
-            // NOTE: However, outside the route closure, $this refers to the current object like usual!
-            $route->add(new AuthenticationHandler($app->getContainer()));
-
-            if(!is_array($authenticators))
-                $authenticators = [ $authenticators ];
-
-            foreach($authenticators as $authenticator)
-            {
-                if(is_a($authenticator, Authenticator::class))
-                    $route->add($authenticator);
-            }
-        }
-        */
     }
 
 }

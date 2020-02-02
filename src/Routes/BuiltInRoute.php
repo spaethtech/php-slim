@@ -6,6 +6,12 @@ namespace MVQN\Slim\Routes;
 use Psr\Http\Server\MiddlewareInterface;
 use Slim\Interfaces\RouteInterface;
 
+/**
+ * Class BuiltInRoute
+ *
+ * @package MVQN\Slim\Routes
+ * @author Ryan Spaeth <rspaeth@mvqn.net>
+ */
 abstract class BuiltInRoute
 {
     /** @var RouteInterface */
