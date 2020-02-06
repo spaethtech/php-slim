@@ -14,6 +14,7 @@ use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
  *
  * @package MVQN\Slim\Middleware\Authentication\Authenticators
  * @author Ryan Spaeth <rspaeth@mvqn.net>
+ * @copyright 2020 Spaeth Technologies, Inc.
  */
 class CallbackAuthenticator extends Authenticator
 {

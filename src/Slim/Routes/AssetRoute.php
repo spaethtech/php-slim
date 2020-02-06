@@ -17,6 +17,7 @@ use Slim\Exception\HttpNotFoundException;
  *
  * @package MVQN\Slim\Routes
  * @author Ryan Spaeth <rspaeth@mvqn.net>
+ * @copyright 2020 Spaeth Technologies, Inc.
  * @final
  */
 final class AssetRoute extends BuiltInRoute

@@ -15,6 +15,7 @@ use Slim\Exception\HttpUnauthorizedException;
  *
  * @package MVQN\Slim\Middleware\Authentication
  * @author Ryan Spaeth <rspaeth@mvqn.net>
+ * @copyright 2020 Spaeth Technologies, Inc.
  */
 class AuthenticationHandler implements MiddlewareInterface
 {

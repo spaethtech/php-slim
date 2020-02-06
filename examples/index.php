@@ -16,6 +16,7 @@ use Psr\Http\Message\ServerRequestInterface as Request;
  * Use an immediately invoked function here, to avoid global namespace pollution...
  *
  * @author Ryan Spaeth <rspaeth@mvqn.net>
+ * @copyright 2020 Spaeth Technologies, Inc.
  */
 
 
@@ -30,17 +31,13 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 $app->get('/hello/{name}', function (Request $request, Response $response, $args): Response {
     $name = $args['name'];
     $data = [ "name" => $name, "message" => "This is a JSON test!" ];
-    //return JsonResponse::fromResponse($response, $data);
-
     return new JsonResponse($response, $data);
-
-
 })
     ->add(new AuthenticationHandler($app))
     ->add(new CallbackAuthenticator(
         function(Request $request): bool
         {
-            return false;
+            return true;
         }
     ));
 

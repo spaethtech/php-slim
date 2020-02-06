@@ -13,6 +13,7 @@ use Slim\Psr7\Response;
  *
  * @package MVQN\Slim\Psr7\Http\Message
  * @author Ryan Spaeth <rspaeth@mvqn.net>
+ * @copyright 2020 Spaeth Technologies, Inc.
  */
 class JsonResponse extends Response
 {

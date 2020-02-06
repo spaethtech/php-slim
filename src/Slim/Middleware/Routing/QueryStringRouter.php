@@ -13,9 +13,10 @@ use Psr\Http\Server\RequestHandlerInterface;
  *
  * @package MVQN\Slim\Middlware\Routing
  * @author Ryan Spaeth <rspaeth@mvqn.net>
- *
+ * @copyright 2020 Spaeth Technologies, Inc.
+ * @final
  */
-class QueryStringRouter implements MiddlewareInterface
+final class QueryStringRouter implements MiddlewareInterface
 {
     // =================================================================================================================
     // CONSTANTS

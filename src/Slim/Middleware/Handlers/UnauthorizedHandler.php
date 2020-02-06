@@ -13,6 +13,7 @@ use Throwable;
  *
  * @package MVQN\Slim\Error\Handlers
  * @author Ryan Spaeth <rspaeth@mvqn.net>
+ * @copyright 2020 Spaeth Technologies, Inc.
  */
 final class UnauthorizedHandler extends ErrorHandler
 {
