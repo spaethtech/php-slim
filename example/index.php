@@ -18,6 +18,8 @@ use Psr\Http\Message\ServerRequestInterface as Request;
  * @author Ryan Spaeth <rspaeth@mvqn.net>
  */
 
+
+
 // NOTE: This Controller handles any static assets (i.e. png, jpg, html, pdf, etc.)...
 (new AssetRoute($app, __DIR__."/assets/"));
 
@@ -27,7 +29,11 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 // Define app routes
 $app->get('/hello/{name}', function (Request $request, Response $response, $args): Response {
     $name = $args['name'];
-    return JsonResponse::fromResponse($response, [ "name" => $name, "message" => "This is a JSON test!" ]);
+    $data = [ "name" => $name, "message" => "This is a JSON test!" ];
+    //return JsonResponse::fromResponse($response, $data);
+
+    return new JsonResponse($response, $data);
+
 })
     ->add(new AuthenticationHandler($app))
     ->add(new CallbackAuthenticator(

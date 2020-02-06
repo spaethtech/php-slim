@@ -1,4 +1,5 @@
 <?php
+/** @noinspection SpellCheckingInspection */
 declare(strict_types=1);
 
 namespace MVQN\Slim\Routes;
@@ -20,17 +21,20 @@ use Slim\Exception\HttpNotFoundException;
  */
 final class AssetRoute extends BuiltInRoute
 {
+    public const METHODS = [ "GET" ];
+    public const PATTERN = "/{file:.+}.{ext:jpg|png|pdf|txt|css|js|htm|html|svg|ttf|woff|woff2}";
+
     /**
      * AssetController constructor.
      *
      * @param App $app The Slim Application for which to configure routing.
      * @param string $path
      *
-     * @noinspection SpellCheckingInspection
      */
     public function __construct(App $app, string $path)
     {
-        $this->route = $app->get("/{file:.+}.{ext:jpg|png|pdf|txt|css|js|htm|html|svg|ttf|woff|woff2}",
+
+        $this->route = $app->map(self::METHODS, self::PATTERN,
             function (Request $request, Response $response, array $args) use ($app, $path)
             {
                 // Get the file and extension from the matched route.
@@ -79,5 +83,8 @@ final class AssetRoute extends BuiltInRoute
         )->setName(AssetRoute::class);
 
     }
+
+
+
 
 }

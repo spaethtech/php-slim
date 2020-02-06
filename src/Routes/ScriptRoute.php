@@ -19,6 +19,9 @@ use Slim\Exception\HttpNotFoundException;
  */
 final class ScriptRoute extends BuiltInRoute
 {
+    public const METHODS = [ "GET", "POST" ];
+    public const PATTERN = "/{file:.+}.{ext:php}";
+
     /**
      * ScriptController constructor.
      *
@@ -27,7 +30,7 @@ final class ScriptRoute extends BuiltInRoute
      */
     public function __construct(App $app, string $path)
     {
-        $this->route = $app->map([ "GET", "POST" ], "/{file:.+}.{ext:php}",
+        $this->route = $app->map(self::METHODS, self::PATTERN,
             function (Request $request, Response $response, array $args) use ($app, $path)
             {
                 // Get the file and extension from the matched route.
@@ -53,6 +56,11 @@ final class ScriptRoute extends BuiltInRoute
                 die();
             }
         )->setName(ScriptRoute::class);
+
+    }
+
+    public function __invoke()
+    {
 
     }
 

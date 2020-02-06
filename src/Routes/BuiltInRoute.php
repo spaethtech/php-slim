@@ -7,24 +7,36 @@ use Psr\Http\Server\MiddlewareInterface;
 use Slim\Interfaces\RouteInterface;
 
 /**
- * Class BuiltInRoute
+ * An abstract Route class, from which any Route package
  *
  * @package MVQN\Slim\Routes
  * @author Ryan Spaeth <rspaeth@mvqn.net>
  */
 abstract class BuiltInRoute
 {
+
     /** @var RouteInterface */
     protected $route;
 
     /**
-     * @param callable|MiddlewareInterface|string $callable
+     * @param callable|MiddlewareInterface|string $middleware
      *
      * @return RouteInterface
+     * @noinspection PhpUnused
      */
-    public function add($callable)
+    public function add($middleware): RouteInterface
     {
-        return $this->route->add($callable);
+        return $this->route->add($middleware);
     }
 
+    /**
+     * @param MiddlewareInterface $middleware
+     *
+     * @return RouteInterface
+     * @noinspection PhpUnused
+     */
+    public function addMiddleware($middleware): RouteInterface
+    {
+        return $this->route->add($middleware);
+    }
 }
