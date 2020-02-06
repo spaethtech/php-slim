@@ -31,7 +31,8 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 $app->get('/hello/{name}', function (Request $request, Response $response, $args): Response {
     $name = $args['name'];
     $data = [ "name" => $name, "message" => "This is a JSON test!" ];
-    return new JsonResponse($response, $data);
+    return JsonResponse::fromResponse($response, $data);
+    //return JsonResponse::create($data);
 })
     ->add(new AuthenticationHandler($app))
     ->add(new CallbackAuthenticator(
