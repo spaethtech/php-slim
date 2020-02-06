@@ -59,9 +59,5 @@ final class ScriptRoute extends BuiltInRoute
 
     }
 
-    public function __invoke()
-    {
-
-    }
 
 }

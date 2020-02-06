@@ -5,17 +5,20 @@ namespace MVQN\Slim\Middleware\Handlers;
 
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
+use Slim\App;
+use Slim\Routing\RouteContext;
 use Throwable;
 
 /**
- * Class NotFoundHandler
+ * Class MethodNotAllowedHandler
  *
  * @package MVQN\Slim\Error\Handlers
  * @author Ryan Spaeth <rspaeth@mvqn.net>
  */
-final class NotFoundHandler extends ErrorHandler
+final class MethodNotAllowedHandler extends ErrorHandler
 {
     /**
+     *
      * @param Request $request
      * @param Throwable $exception
      * @param bool $displayErrorDetails
@@ -32,12 +35,12 @@ final class NotFoundHandler extends ErrorHandler
             "vRoute"        => $request->getAttribute("vRoute"),
             "vQuery"        => $request->getAttribute("vQuery"),
             "authenticator" => $request->getAttribute("authenticator"),
-            "routes"        => $this->app->getRouteCollector()->getRoutes(),
+            "methods"       => RouteContext::fromRequest($request)->getRoutingResults()->getAllowedMethods(),
         ];
 
-        $response = $this->app->getResponseFactory()->createResponse(404);
-        //return $this->render($response, "404.html.twig", $data);
-        return $this->render($response, __DIR__."/templates/404.php", $data);
+        $response = $this->app->getResponseFactory()->createResponse(405);
+        //return $this->render($response, "405.html.twig", $data);
+        return $this->render($response, __DIR__ . "/templates/405.php", $data);
     }
 
 }

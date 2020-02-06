@@ -2,8 +2,6 @@
 declare(strict_types=1);
 require_once __DIR__ . "/../vendor/autoload.php";
 
-use DI\Container;
-use Psr\Http\Message\ResponseFactoryInterface;
 use Slim\Factory\AppFactory;
 use MVQN\Slim\Middleware\Routing\QueryStringRouter;
 use MVQN\Slim\Middleware\Authentication\Authenticators\FixedAuthenticator;
@@ -14,21 +12,18 @@ use Slim\Exception\HttpUnauthorizedException;
 use MVQN\Slim\Middleware\Handlers\MethodNotAllowedHandler;
 use MVQN\Slim\Middleware\Handlers\NotFoundHandler;
 use MVQN\Slim\Middleware\Handlers\UnauthorizedHandler;
-use Slim\Psr7\Factory\ResponseFactory;
 
-AppFactory::setContainer($container = new Container());
+
+
 $app = AppFactory::create();
-
-// Necessary for injection of the base App, as a ResponseFactory is required to function properly.
-$container->set(ResponseFactoryInterface::class, DI\create(ResponseFactory::class));
 
 // Add Routing Middleware.
 $app->addRoutingMiddleware();
 
+$app->add(new QueryStringRouter("/", ["#/public/#" => "/"]));
+
 // Add an application-level Authenticator.
 $app->add(new FixedAuthenticator(true));
-
-$app->add(new QueryStringRouter("/", ["#/public/#" => "/"]));
 
 /**
  * Add Error Handling Middleware

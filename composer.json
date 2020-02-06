@@ -21,7 +21,7 @@
     },
     "autoload": {
         "psr-4": {
-            "MVQN\\Slim\\": "src/"
+            "MVQN\\": "src/"
         }
     },
     "autoload-dev": {

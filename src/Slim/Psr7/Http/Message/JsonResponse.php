@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace MVQN\Slim\Psr7\Http\Message;
 
 use Psr\Http\Message\ResponseInterface;
+use Slim\Psr7\Factory\ResponseFactory;
 use Slim\Psr7\Headers;
 use Slim\Psr7\Response;
 
@@ -29,8 +30,11 @@ class JsonResponse extends Response
      * @param array $data The data to be encoded as JSON.
      * @param int $options Optional encoding options, defaults to (JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES).
      */
-    public function __construct(ResponseInterface $response, array $data, int $options = self::DEFAULT_JSON_OPTIONS)
+    public function __construct(?ResponseInterface $response, array $data, int $options = self::DEFAULT_JSON_OPTIONS)
     {
+        if($response === null)
+            $response = (new ResponseFactory())->createResponse();
+
         // Get the status, headers and body from the provided response, merging the necessary header(s) and body.
         $status = $response->getStatusCode();
         $headers = new Headers(array_merge($response->getHeaders(), ["Content-Type" => "application/json"]));
