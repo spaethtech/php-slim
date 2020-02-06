@@ -34,12 +34,13 @@ $app->get('/hello/{name}', function (Request $request, Response $response, $args
 
     return new JsonResponse($response, $data);
 
+
 })
     ->add(new AuthenticationHandler($app))
     ->add(new CallbackAuthenticator(
         function(Request $request): bool
         {
-            return true;
+            return false;
         }
     ));
 

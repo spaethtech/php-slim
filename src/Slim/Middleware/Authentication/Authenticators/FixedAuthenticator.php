@@ -7,10 +7,14 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
 
-
+/**
+ * Class FixedAuthenticator
+ *
+ * @package MVQN\Slim\Middleware\Authentication\Authenticators
+ * @author Ryan Spaeth <rspaeth@mvqn.net>
+ */
 class FixedAuthenticator extends Authenticator
 {
-
     /**
      * @var bool
      */
@@ -24,7 +28,10 @@ class FixedAuthenticator extends Authenticator
         $this->fixed = $fixed;
     }
 
-    public function __invoke(Request $request, RequestHandler $handler): Response
+    /**
+     * @inheritDoc
+     */
+    public function process(Request $request, RequestHandler $handler): Response
     {
         $request = $request
             ->withAttribute("authenticator", get_class($this))
@@ -32,7 +39,4 @@ class FixedAuthenticator extends Authenticator
 
         return $handler->handle($request);
     }
-
-
-
 }

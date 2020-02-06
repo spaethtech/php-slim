@@ -3,23 +3,19 @@ declare(strict_types=1);
 
 namespace MVQN\Slim\Middleware\Routing;
 
-//use MVQN\HTTP\Twig\Extensions\QueryStringRoutingExtension;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-
-//use Slim\Http\Uri;
-//use Slim\Views\Twig;
-//use Twig\Loader\FilesystemLoader;
 
 /**
  * Class QueryStringRouter
  *
- * @package UCRM\Routing\Middleware
+ * @package MVQN\Slim\Middlware\Routing
  * @author Ryan Spaeth <rspaeth@mvqn.net>
  *
  */
-class QueryStringRouter
+class QueryStringRouter implements MiddlewareInterface
 {
     // =================================================================================================================
     // CONSTANTS
@@ -108,40 +104,7 @@ class QueryStringRouter
         //QueryStringRoutingExtension::addGlobal("defaultRoute", $defaultRoute);
     }
 
-    /**
-     * QueryStringRouter middleware as invocable.
-     *
-     * @param  ServerRequestInterface $request The current PSR-7 ServerRequest object.
-     * @param  RequestHandlerInterface $handler
-     *
-     * @return ResponseInterface Returns a PSR-7 Response object.
-     */
-    //public function __invoke($request, $response, $next)
-    public function __invoke($request, $handler)
-    {
-        // Get the current query if set, otherwise set it as the default route only.
-        $queryString = $_SERVER["QUERY_STRING"] ?? $this->defaultRoute;
 
-        // Extract (and remove) the route from the query string, using the default route if none found!
-        $vRoute = $this->extractRouteFromQueryString($queryString, $this->rewriteRules) ?: $this->defaultRoute;
-
-        parse_str($queryString, $vQuery);
-
-        $uri = $request->getUri()
-            ->withPath($vRoute)
-            ->withQuery($queryString);
-
-        $request = $request
-            ->withUri($uri)
-            ->withQueryParams($vQuery)
-            ->withAttribute("vRoute", $vRoute)
-            ->withAttribute("vQuery", $vQuery);
-
-        $_GET = $vQuery;
-        $_SERVER["QUERY_STRING"] = $queryString;
-
-        return $handler->handle($request);
-    }
 
     public static function extractRouteFromQueryString(string &$queryString, array $rewriteRules = []): string
     {
@@ -179,4 +142,32 @@ class QueryStringRouter
         return $route;
     }
 
+    /**
+     * @inheritDoc
+     */
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
+    {
+        // Get the current query if set, otherwise set it as the default route only.
+        $queryString = $_SERVER["QUERY_STRING"] ?? $this->defaultRoute;
+
+        // Extract (and remove) the route from the query string, using the default route if none found!
+        $vRoute = $this->extractRouteFromQueryString($queryString, $this->rewriteRules) ?: $this->defaultRoute;
+
+        parse_str($queryString, $vQuery);
+
+        $uri = $request->getUri()
+            ->withPath($vRoute)
+            ->withQuery($queryString);
+
+        $request = $request
+            ->withUri($uri)
+            ->withQueryParams($vQuery)
+            ->withAttribute("vRoute", $vRoute)
+            ->withAttribute("vQuery", $vQuery);
+
+        $_GET = $vQuery;
+        $_SERVER["QUERY_STRING"] = $queryString;
+
+        return $handler->handle($request);
+    }
 }

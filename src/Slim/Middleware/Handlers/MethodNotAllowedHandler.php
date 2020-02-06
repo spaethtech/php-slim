@@ -5,7 +5,6 @@ namespace MVQN\Slim\Middleware\Handlers;
 
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
-use Slim\App;
 use Slim\Routing\RouteContext;
 use Throwable;
 

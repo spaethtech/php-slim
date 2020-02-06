@@ -3,18 +3,20 @@ declare(strict_types=1);
 
 namespace MVQN\Slim\Middleware\Authentication;
 
-use MVQN\Slim\Middleware\Handlers\UnauthorizedHandler;
-use Psr\Container\ContainerInterface;
-use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
 use Slim\App;
 use Slim\Exception\HttpUnauthorizedException;
-use Slim\Psr7\Stream;
 
-
-class AuthenticationHandler
+/**
+ * Class AuthenticationHandler
+ *
+ * @package MVQN\Slim\Middleware\Authentication
+ * @author Ryan Spaeth <rspaeth@mvqn.net>
+ */
+class AuthenticationHandler implements MiddlewareInterface
 {
     /**
      * @var App
@@ -32,12 +34,10 @@ class AuthenticationHandler
     }
 
     /**
-     * @param Request $request
-     * @param RequestHandler $handler
-     * @return Response
+     * @inheritDoc
      * @throws HttpUnauthorizedException
      */
-    public function __invoke(Request $request, RequestHandler $handler): Response
+    public function process(Request $request, RequestHandler $handler): Response
     {
         if($request->getAttribute("authenticated"))
         {
@@ -45,11 +45,7 @@ class AuthenticationHandler
         }
         else
         {
-            //$response = $this->app->getResponseFactory()->createResponse(401, "Unauthorized");
-            //$response = (new UnauthorizedHandler($this->app))($request, $response);
-            //return $response;
             throw new HttpUnauthorizedException($request);
         }
     }
-
 }

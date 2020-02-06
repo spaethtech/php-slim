@@ -5,6 +5,9 @@ namespace MVQN\Slim\Middleware\Authentication\Authenticators\Exceptions;
 
 use Exception;
 
+/**
+ * @noinspection PhpUnused
+ */
 final class InvalidCallbackException extends Exception
 {
 }

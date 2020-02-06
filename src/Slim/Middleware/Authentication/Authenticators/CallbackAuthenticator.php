@@ -9,8 +9,12 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
 
 
-
-
+/**
+ * Class CallbackAuthenticator
+ *
+ * @package MVQN\Slim\Middleware\Authentication\Authenticators
+ * @author Ryan Spaeth <rspaeth@mvqn.net>
+ */
 class CallbackAuthenticator extends Authenticator
 {
     /**
@@ -30,13 +34,9 @@ class CallbackAuthenticator extends Authenticator
     }
 
     /**
-     * Middleware invokable class
-     *
-     * @param Request $request The current PSR-7 Request object.
-     * @param RequestHandler $handler
-     * @return Response Returns a PSR-7 Response object.
+     * @inheritDoc
      */
-    public function __invoke(Request $request, RequestHandler $handler): Response
+    public function process(Request $request, RequestHandler $handler): Response
     {
         $request = $request
             ->withAttribute("authenticator", get_class($this))
