@@ -4,11 +4,13 @@ declare(strict_types=1);
 require_once __DIR__ . "/../vendor/autoload.php";
 require_once __DIR__ . "/bootstrap.php";
 
+use MVQN\Slim\Controllers\ExampleController;
 use MVQN\Slim\Middleware\Authentication\AuthenticationHandler;
 use MVQN\Slim\Middleware\Authentication\Authenticators\CallbackAuthenticator;
+use MVQN\Slim\Middleware\Authentication\Authenticators\FixedAuthenticator;
 use MVQN\Slim\Psr7\Http\Message\JsonResponse;
-use MVQN\Slim\Routes\AssetRoute;
-use MVQN\Slim\Routes\ScriptRoute;
+use MVQN\Slim\Controllers\AssetController;
+use MVQN\Slim\Controllers\ScriptController;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
@@ -19,13 +21,19 @@ use Psr\Http\Message\ServerRequestInterface as Request;
  * @copyright 2020 Spaeth Technologies, Inc.
  */
 
-
-
 // NOTE: This Controller handles any static assets (i.e. png, jpg, html, pdf, etc.)...
-(new AssetRoute($app, __DIR__."/assets/"));
+$app->addController(new AssetController($app, __DIR__ . "/assets/"))
+    ->addMiddleware(new AuthenticationHandler($app))
+    ->addMiddleware(new FixedAuthenticator(true));
 
 // NOTE: This Controller handles any PHP scripts...
-(new ScriptRoute($app, __DIR__."/src/"));
+$app->addController(new ScriptController($app, __DIR__ . "/scripts/"))
+    ->addMiddleware(new AuthenticationHandler($app))
+    ->addMiddleware(new FixedAuthenticator(false));
+
+//$app->addController(new ExampleController($app));
+//$app->get("/date", [ new ExampleController($app), "date"]);
+
 
 // Define app routes
 $app->get('/hello/{name}', function (Request $request, Response $response, $args): Response {
@@ -34,13 +42,15 @@ $app->get('/hello/{name}', function (Request $request, Response $response, $args
     return JsonResponse::fromResponse($response, $data);
     //return JsonResponse::create($data);
 })
-    ->add(new AuthenticationHandler($app))
+    ->add(new AuthenticationHandler($app));
+    /*
     ->add(new CallbackAuthenticator(
         function(Request $request): bool
         {
             return true;
         }
     ));
+    */
 
 $app->map(["post", "patch"],"/test", function (Request $request, Response $response, $args): Response {
     $response->getBody()->write("TEST");

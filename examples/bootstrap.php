@@ -2,8 +2,7 @@
 declare(strict_types=1);
 require_once __DIR__ . "/../vendor/autoload.php";
 
-use Slim\Factory\AppFactory;
-use MVQN\Slim\Middleware\Routing\QueryStringRouter;
+use MVQN\Slim\App;
 use MVQN\Slim\Middleware\Authentication\Authenticators\FixedAuthenticator;
 
 use Slim\Exception\HttpMethodNotAllowedException;
@@ -13,17 +12,18 @@ use MVQN\Slim\Middleware\Handlers\MethodNotAllowedHandler;
 use MVQN\Slim\Middleware\Handlers\NotFoundHandler;
 use MVQN\Slim\Middleware\Handlers\UnauthorizedHandler;
 
-
-
-$app = AppFactory::create();
+$app = new App();
 
 // Add Routing Middleware.
 $app->addRoutingMiddleware();
-
-$app->add(new QueryStringRouter("/", ["#/public/#" => "/"]));
+$app->addQueryStringRoutingMiddleware("/", ["#/public/#" => "/"]);
 
 // Add an application-level Authenticator.
-$app->add(new FixedAuthenticator(true));
+$app->addAuthenticator(new FixedAuthenticator(true));
+
+
+
+
 
 /**
  * Add Error Handling Middleware
