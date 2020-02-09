@@ -43,17 +43,20 @@ final class ScriptController extends Controller
      */
     public function __invoke(App $app): RouteGroupInterface
     {
-        return $this->group("", function(RouteCollectorProxyInterface $group)
+        // Mapped, in cases where a DI Container replaces the $this context in Closures.
+        $self = $this;
+
+        return $this->group("", function(RouteCollectorProxyInterface $group) use ($self)
         {
             $group->map([ "GET", "POST" ], "/{file:.+}.{ext:php}",
-                function (Request $request, Response $response, array $args)
+                function (Request $request, Response $response, array $args) use ($self)
                 {
                     // Get the file and extension from the matched route.
                     $file = $args["file"] ?? "index";
                     $ext = $args["ext"] ?? "php";
 
                     // Interpolate the absolute path to the PHP script.
-                    $path = rtrim($this->path, "/") . "/$file.$ext";
+                    $path = rtrim($self->path, "/") . "/$file.$ext";
 
                     // IF the PHP script file does not exist, THEN return a 404 page!
                     if(!file_exists($path))

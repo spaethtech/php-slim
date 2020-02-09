@@ -45,19 +45,22 @@ final class AssetController extends Controller
      */
     public function __invoke(App $app): RouteGroupInterface
     {
-        return $this->group("", function(RouteCollectorProxyInterface $group)
+        // Mapped, in cases where a DI Container replaces the $this context in Closures.
+        $self = $this;
+
+        return $this->group("", function(RouteCollectorProxyInterface $group) use ($self)
         {
             // NOTE: More asset types can be added as necessary...
 
             $group->map([ "GET" ], "/{file:.+}.{ext:jpg|png|pdf|txt|css|js|htm|html|svg|ttf|woff|woff2}",
-                function (Request $request, Response $response, array $args)
+                function (Request $request, Response $response, array $args) use ($self)
                 {
                     // Get the file and extension from the matched route.
                     $file = $args["file"];
                     $ext = $args["ext"];
 
                     // Interpolate the absolute path to the static asset.
-                    $path = realpath(rtrim($this->path, "/") . "/$file.$ext");
+                    $path = realpath(rtrim($self->path, "/") . "/$file.$ext");
 
                     // IF the static asset file does not exist, THEN throw a HTTP 404 Not Found Exception!
                     if (!$path)

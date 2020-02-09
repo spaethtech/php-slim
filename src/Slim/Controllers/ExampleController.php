@@ -38,10 +38,13 @@ final class ExampleController extends Controller
      */
     public function __invoke(App $app): RouteGroupInterface
     {
-        return $this->group("", function(RouteCollectorProxyInterface $group)
+        // Mapped, in cases where a DI Container replaces the $this context in Closures.
+        $self = $this;
+
+        return $this->group("", function(RouteCollectorProxyInterface $group) use ($self)
         {
             $group->get("/test",
-                function (Request $request, Response $response, array $args)
+                function (Request $request, Response $response, array $args) use ($self)
                 {
                     $response->getBody()->write("TEST");
                     return $response;
