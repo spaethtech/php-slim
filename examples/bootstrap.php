@@ -2,15 +2,15 @@
 declare(strict_types=1);
 require_once __DIR__ . "/../vendor/autoload.php";
 
-use MVQN\Slim\App;
-use MVQN\Slim\Middleware\Authentication\Authenticators\FixedAuthenticator;
+use rspaeth\Slim\App;
+use rspaeth\Slim\Middleware\Authentication\Authenticators\FixedAuthenticator;
 
 use Slim\Exception\HttpMethodNotAllowedException;
 use Slim\Exception\HttpNotFoundException;
 use Slim\Exception\HttpUnauthorizedException;
-use MVQN\Slim\Middleware\Handlers\MethodNotAllowedHandler;
-use MVQN\Slim\Middleware\Handlers\NotFoundHandler;
-use MVQN\Slim\Middleware\Handlers\UnauthorizedHandler;
+use rspaeth\Slim\Middleware\Handlers\MethodNotAllowedHandler;
+use rspaeth\Slim\Middleware\Handlers\NotFoundHandler;
+use rspaeth\Slim\Middleware\Handlers\UnauthorizedHandler;
 
 $app = new App();
 

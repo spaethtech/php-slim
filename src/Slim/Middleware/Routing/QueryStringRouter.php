@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace MVQN\Slim\Middleware\Routing;
+namespace rspaeth\Slim\Middleware\Routing;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -11,7 +11,7 @@ use Psr\Http\Server\RequestHandlerInterface;
 /**
  * Class QueryStringRouter
  *
- * @package MVQN\Slim\Middlware\Routing
+ * @package rspaeth\Slim\Middlware\Routing
  * @author Ryan Spaeth <rspaeth@mvqn.net>
  * @copyright 2020 Spaeth Technologies, Inc.
  * @final

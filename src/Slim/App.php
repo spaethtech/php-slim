@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace MVQN\Slim;
+namespace rspaeth\Slim;
 
-use MVQN\Slim\Middleware\Authentication\Authenticators\Authenticator;
-use MVQN\Slim\Middleware\Routing\QueryStringRouter;
-use MVQN\Slim\Controllers\Controller;
+use rspaeth\Slim\Middleware\Authentication\Authenticators\Authenticator;
+use rspaeth\Slim\Middleware\Routing\QueryStringRouter;
+use rspaeth\Slim\Controllers\Controller;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Slim\Interfaces\CallableResolverInterface;

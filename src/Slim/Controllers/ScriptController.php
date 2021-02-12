@@ -1,9 +1,9 @@
 <?php /** @noinspection PhpUnusedParameterInspection */
 declare(strict_types=1);
 
-namespace MVQN\Slim\Controllers;
+namespace rspaeth\Slim\Controllers;
 
-use MVQN\Slim\App;
+use rspaeth\Slim\App;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 use Slim\Exception\HttpNotFoundException;
@@ -13,7 +13,7 @@ use Slim\Interfaces\RouteGroupInterface;
 /**
  * A Controller to handle routing and delivery of PHP scripts.
  *
- * @package MVQN\Slim\Controllers
+ * @package rspaeth\Slim\Controllers
  * @final
  *
  * @author Ryan Spaeth <rspaeth@mvqn.net>

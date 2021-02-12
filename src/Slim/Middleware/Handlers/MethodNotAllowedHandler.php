@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace MVQN\Slim\Middleware\Handlers;
+namespace rspaeth\Slim\Middleware\Handlers;
 
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -11,7 +11,7 @@ use Throwable;
 /**
  * Class MethodNotAllowedHandler
  *
- * @package MVQN\Slim\Error\Handlers
+ * @package rspaeth\Slim\Error\Handlers
  * @author Ryan Spaeth <rspaeth@mvqn.net>
  * @copyright 2020 Spaeth Technologies, Inc.
  */

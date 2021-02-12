@@ -1,7 +1,6 @@
 {
-    "name": "mvqn/slim",
+    "name": "rspaeth/slim",
     "description": "A collection of Slim 4 Middleware.",
-    "minimum-stability": "stable",
     "type": "library",
     "license": "MIT",
     "authors": [
@@ -20,11 +19,16 @@
     },
     "autoload": {
         "psr-4": {
-            "MVQN\\": "src/"
+            "rspaeth\\": "./src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
         }
-    }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "repositories": [
+        { "type": "path", "url": "../*"}
+    ]
 }
