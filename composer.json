@@ -9,9 +9,12 @@
             "email": "rspaeth@mvqn.net"
         }
     ],
+    "minimum-stability": "dev",
+    "prefer-stable": true,
     "require": {
         "php": "~7.3",
         "ext-json": "*",
+
         "slim/slim": "~4",
         "slim/psr7": "^1.0"
     },
@@ -21,11 +24,6 @@
         "psr-4": {
             "MVQN\\": "./src/"
         }
-    },
-    "autoload-dev": {
-        "psr-4": {
-        }
-    },
-    "minimum-stability": "dev",
-    "prefer-stable": true
+    }
+
 }
