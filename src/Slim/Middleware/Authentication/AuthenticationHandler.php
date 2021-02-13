@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace rspaeth\Slim\Middleware\Authentication;
+namespace MVQN\Slim\Middleware\Authentication;
 
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -13,7 +13,7 @@ use Slim\Exception\HttpUnauthorizedException;
 /**
  * Class AuthenticationHandler
  *
- * @package rspaeth\Slim\Middleware\Authentication
+ * @package MVQN\Slim\Middleware\Authentication
  * @author Ryan Spaeth <rspaeth@mvqn.net>
  * @copyright 2020 Spaeth Technologies, Inc.
  */

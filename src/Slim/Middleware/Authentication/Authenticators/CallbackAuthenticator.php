@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace rspaeth\Slim\Middleware\Authentication\Authenticators;
+namespace MVQN\Slim\Middleware\Authentication\Authenticators;
 
 use Closure;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -12,7 +12,7 @@ use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
 /**
  * Class CallbackAuthenticator
  *
- * @package rspaeth\Slim\Middleware\Authentication\Authenticators
+ * @package MVQN\Slim\Middleware\Authentication\Authenticators
  * @author Ryan Spaeth <rspaeth@mvqn.net>
  * @copyright 2020 Spaeth Technologies, Inc.
  */

@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace rspaeth\Slim\Controllers;
+namespace MVQN\Slim\Controllers;
 
-use rspaeth\Slim\App;
+use MVQN\Slim\App;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Exception\HttpNotFoundException;
@@ -13,7 +13,7 @@ use Slim\Interfaces\RouteGroupInterface;
 /**
  * A Controller to handle routing and delivery of static assets.
  *
- * @package rspaeth\Slim\Controllers
+ * @package MVQN\Slim\Controllers
  * @final
  *
  * @author Ryan Spaeth <rspaeth@mvqn.net>

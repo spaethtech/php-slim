@@ -4,13 +4,13 @@ declare(strict_types=1);
 require_once __DIR__ . "/../vendor/autoload.php";
 require_once __DIR__ . "/bootstrap.php";
 
-use rspaeth\Slim\Controllers\ExampleController;
-use rspaeth\Slim\Middleware\Authentication\AuthenticationHandler;
-use rspaeth\Slim\Middleware\Authentication\Authenticators\CallbackAuthenticator;
-use rspaeth\Slim\Middleware\Authentication\Authenticators\FixedAuthenticator;
-use rspaeth\Slim\Psr7\Http\Message\JsonResponse;
-use rspaeth\Slim\Controllers\AssetController;
-use rspaeth\Slim\Controllers\ScriptController;
+use MVQN\Slim\Controllers\ExampleController;
+use MVQN\Slim\Middleware\Authentication\AuthenticationHandler;
+use MVQN\Slim\Middleware\Authentication\Authenticators\CallbackAuthenticator;
+use MVQN\Slim\Middleware\Authentication\Authenticators\FixedAuthenticator;
+use MVQN\Slim\Psr7\Http\Message\JsonResponse;
+use MVQN\Slim\Controllers\AssetController;
+use MVQN\Slim\Controllers\ScriptController;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 

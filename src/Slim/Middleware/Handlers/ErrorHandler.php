@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace rspaeth\Slim\Middleware\Handlers;
+namespace MVQN\Slim\Middleware\Handlers;
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Slim\App;
@@ -9,7 +9,7 @@ use Slim\App;
 /**
  * Class ErrorHandler
  *
- * @package rspaeth\Slim\Error\Handlers
+ * @package MVQN\Slim\Error\Handlers
  * @author Ryan Spaeth <rspaeth@mvqn.net>
  * @copyright 2020 Spaeth Technologies, Inc.
  */
