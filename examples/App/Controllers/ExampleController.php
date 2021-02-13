@@ -1,10 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace MVQN\Slim\Controllers;
+namespace App\Controllers;
 
 use DateTime;
 use MVQN\Slim\App;
+use MVQN\Slim\Controllers\Controller;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Exception\HttpNotFoundException;
@@ -17,7 +18,7 @@ use Slim\Interfaces\RouteGroupInterface;
  * @package MVQN\Slim\Controllers
  * @final
  *
- * @author Ryan Spaeth <rspaeth@mvqn.net>
+ * @author Ryan Spaeth
  * @copyright 2020 Spaeth Technologies, Inc.
  */
 final class ExampleController extends Controller
@@ -58,7 +59,7 @@ final class ExampleController extends Controller
 
     }
 
-    public function date(Request $request, Response $response, $args): Response
+    public static function date(Request $request, Response $response, $args): Response
     {
         $response->getBody()->write((new DateTime())->format("m/d/yy"));
         return $response;

@@ -12,35 +12,23 @@ use Psr\Http\Server\RequestHandlerInterface;
  * Class QueryStringRouter
  *
  * @package MVQN\Slim\Middlware\Routing
- * @author Ryan Spaeth <rspaeth@mvqn.net>
+ * @author Ryan Spaeth
  * @copyright 2020 Spaeth Technologies, Inc.
  * @final
  */
 final class QueryStringRouter implements MiddlewareInterface
 {
-    // =================================================================================================================
-    // CONSTANTS
-    // =================================================================================================================
-
     /**
      * @var array Supported file extensions that can be used for automatic lookup.  Prioritized by the provided order!
      * @deprecated
      */
     protected const AUTO_EXTENSIONS = [ "php", "html", "twig", "html.twig", "jpg", "png", "pdf", "txt", "css", "js" ];
 
-    // =================================================================================================================
-    // PROPERTIES
-    // =================================================================================================================
-
     /**
      * @var array A collection of paths to search for files when routing.
      * @deprecated
      */
-    protected $paths;
-
-    // =================================================================================================================
-    // AUTO EXTENSIONS
-    // =================================================================================================================
+    //protected $paths;
 
     /**
      * Attempts to determine the correct file extension, when none is provided in the path.
@@ -57,8 +45,9 @@ final class QueryStringRouter implements MiddlewareInterface
         {
             // THEN determine the extension part and return it!
             $parts = explode(".", $path);
-            $ext = $parts[count($parts) - 1];
-            return $ext;
+            //$ext = $parts[count($parts) - 1];
+            //return $ext;
+            return $parts[count($parts) - 1];
         }
         else
         {

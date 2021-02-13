@@ -10,15 +10,22 @@
     <p>The page you are looking for could not be found.</p>
 
     <?php
+    use MVQN\Slim\Middleware\Authentication\Authenticators\Authenticator;
     use Slim\Interfaces\RouteInterface;
 
+    /**
+     * @var bool                $debug
+     * @var string              $vRoute
+     * @var array               $vQuery
+     * @var Authenticator       $authenticator
+     * @var RouteInterface[]    $routes
+     */
     if (isset($data))
         list(
             $debug,
             $vRoute,
             $vQuery,
             $authenticator,
-            /** @var RouteInterface[] $routes */
             $routes
         ) = array_values($data);
     ?>

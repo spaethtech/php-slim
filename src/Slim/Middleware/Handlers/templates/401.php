@@ -10,15 +10,22 @@
     <p>You are not authorized to view this page.</p>
 
     <?php
+    use MVQN\Slim\Middleware\Authentication\Authenticators\Authenticator;
     use Slim\Routing\Route;
 
+    /**
+     * @var bool            $debug
+     * @var string          $vRoute
+     * @var array           $vQuery
+     * @var Authenticator   $authenticator
+     * @var Route           $route
+     */
     if (isset($data))
         list(
             $debug,
             $vRoute,
             $vQuery,
             $authenticator,
-            /** @var Route $route */
             $route
         ) = array_values($data);
     ?>

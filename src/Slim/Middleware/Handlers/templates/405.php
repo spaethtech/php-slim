@@ -10,13 +10,21 @@
     <p>The current HTTP method/verb is not support by this endpoint.</p>
 
     <?php
+    use MVQN\Slim\Middleware\Authentication\Authenticators\Authenticator;
+
+    /**
+     * @var bool            $debug
+     * @var string          $vRoute
+     * @var array           $vQuery
+     * @var Authenticator   $authenticator
+     * @var array           $methods
+     */
     if (isset($data))
         list(
             $debug,
             $vRoute,
             $vQuery,
             $authenticator,
-            /** @var array $methods */
             $methods
         ) = array_values($data);
     ?>
