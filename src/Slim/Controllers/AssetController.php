@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace MVQN\Slim\Controllers;
 
-use MVQN\Slim\App;
+use MVQN\Slim\Application;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Exception\HttpNotFoundException;
@@ -16,7 +16,7 @@ use Slim\Interfaces\RouteGroupInterface;
  * @package MVQN\Slim\Controllers
  * @final
  *
- * @author Ryan Spaeth <rspaeth@mvqn.net>
+ * @author Ryan Spaeth
  * @copyright 2020 Spaeth Technologies, Inc.
  */
 final class AssetController extends Controller
@@ -29,13 +29,14 @@ final class AssetController extends Controller
     /**
      * AssetController constructor.
      *
-     * @param App $app The Slim Application for which to configure routing.
-     * @param string $path The base path to use when loading assets, defaults to "./assets/".
+     * @param Application $app The {@see Application} to which this Controller belongs.
+     * @param string $path The optional base path to use when loading assets, defaults to "./assets/".
+     * @param string $pattern An optional {@see RouteGroup} pattern to use for this Controller, defaults to "".
      *
      */
-    public function __construct(App $app, string $path = "./assets/")
+    public function __construct(Application $app, string $path = "./assets/", string $pattern = "")
     {
-        parent::__construct($app);
+        parent::__construct($app, $pattern);
         $this->path = $path;
     }
 
@@ -43,7 +44,7 @@ final class AssetController extends Controller
      * @inheritDoc
      * @noinspection SpellCheckingInspection
      */
-    public function __invoke(App $app): RouteGroupInterface
+    public function __invoke(Application $app): RouteGroupInterface
     {
         // Mapped, in cases where a DI Container replaces the $this context in Closures.
         $self = $this;
@@ -51,7 +52,6 @@ final class AssetController extends Controller
         return $this->group("", function(RouteCollectorProxyInterface $group) use ($self)
         {
             // NOTE: More asset types can be added as necessary...
-
             $group->map([ "GET" ], "/{file:.+}.{ext:jpg|png|pdf|txt|css|js|htm|html|svg|ttf|woff|woff2}",
                 function (Request $request, Response $response, array $args) use ($self)
                 {
@@ -66,7 +66,10 @@ final class AssetController extends Controller
                     if (!$path)
                         throw new HttpNotFoundException($request);
 
-                    // Specify the Content-Type given the extension...
+                    // Write the contents of the file to the response body.
+                    $response->getBody()->write(file_get_contents($path));
+
+                    // Determine the Content-Type by the extension...
                     switch ($ext)
                     {
                         case "jpg"  :   $contentType = "image/jpg";                         break;
@@ -87,9 +90,6 @@ final class AssetController extends Controller
 
                         default     :   $contentType = "application/octet-stream";          break;
                     }
-
-                    // Write the contents of the file to the response body.
-                    $response->getBody()->write(file_get_contents($path));
 
                     // Finally, set the response Content-Type header and return the response!
                     return $response->withHeader("Content-Type", $contentType);
