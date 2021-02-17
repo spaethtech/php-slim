@@ -31,12 +31,12 @@ final class AssetController extends Controller
      *
      * @param Application $app The {@see Application} to which this Controller belongs.
      * @param string $path The optional base path to use when loading assets, defaults to "./assets/".
-     * @param string $pattern An optional {@see RouteGroup} pattern to use for this Controller, defaults to "".
+     * @param string $prefix An optional {@see RouteGroup} prefix to use for this Controller, defaults to "".
      *
      */
-    public function __construct(Application $app, string $path = "./assets/", string $pattern = "")
+    public function __construct(Application $app, string $path = "./assets/", string $prefix = "")
     {
-        parent::__construct($app, $pattern);
+        parent::__construct($app, $prefix);
         $this->path = $path;
     }
 

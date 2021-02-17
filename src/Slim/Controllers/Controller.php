@@ -26,16 +26,16 @@ abstract class Controller extends RouteCollectorProxy implements RouteCollectorP
      * Controller constructor.
      *
      * @param Application $app The {@see Application} to which this Controller belongs.
-     * @param string $pattern An optional {@see RouteGroup} pattern to use for this Controller, defaults to "".
+     * @param string $prefix An optional {@see RouteGroup} prefix to use for this Controller, defaults to "".
      */
-    public function __construct(Application $app, string $pattern = "")
+    public function __construct(Application $app, string $prefix = "")
     {
         parent::__construct(
             $app->getResponseFactory(),
             $app->getCallableResolver(),
             $app->getContainer(),
             $app->getRouteCollector(),
-            $pattern
+            $prefix
         );
 
     }
