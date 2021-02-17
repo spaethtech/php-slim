@@ -1,19 +1,18 @@
-<?php
+<?php /** @noinspection PhpUnused, PhpUnusedParameterInspection */
 declare(strict_types=1);
 
 namespace App\Controllers;
 
 use DateTime;
-use MVQN\Slim\App;
+use MVQN\Slim\Application;
 use MVQN\Slim\Controllers\Controller;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
-use Slim\Exception\HttpNotFoundException;
 use Slim\Interfaces\RouteCollectorProxyInterface;
 use Slim\Interfaces\RouteGroupInterface;
 
 /**
- * A Controller to handle routing and delivery using actions.
+ * An example Controller to handle routing and delivery using actions.
  *
  * @package MVQN\Slim\Controllers
  * @final
@@ -26,18 +25,19 @@ final class ExampleController extends Controller
     /**
      * AssetController constructor.
      *
-     * @param App $app The Slim Application for which to configure routing.
+     * @param Application $app The {@see Application} to which this Controller belongs.
      *
      */
-    public function __construct(App $app)
+    public function __construct(Application $app)
     {
         parent::__construct($app, "/example");
     }
 
     /**
      * @inheritDoc
+     * @noinspection PhpUnusedLocalVariableInspection
      */
-    public function __invoke(App $app): RouteGroupInterface
+    public function __invoke(Application $app): RouteGroupInterface
     {
         // Mapped, in cases where a DI Container replaces the $this context in Closures.
         $self = $this;
@@ -52,18 +52,17 @@ final class ExampleController extends Controller
                 }
             )->setName(ExampleController::class);
 
-
-            //$group->get("/date", [ $this, "date" ]);
+            // Add a route using a callable "action".
+            $group->get("/date", [ $this, "date" ]);
 
         });
 
     }
 
-    public static function date(Request $request, Response $response, $args): Response
+    public function date(Request $request, Response $response, $args): Response
     {
         $response->getBody()->write((new DateTime())->format("m/d/yy"));
         return $response;
     }
-
 
 }
