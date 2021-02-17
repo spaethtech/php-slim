@@ -15,7 +15,7 @@ use MVQN\Slim\Middleware\Authentication\Authenticators\FixedAuthenticator;
 use MVQN\Slim\Psr7\Http\Message\JsonResponse;
 use MVQN\Slim\Controllers\AssetController;
 use MVQN\Slim\Controllers\ScriptController;
-use MVQN\Slim\App;
+use MVQN\Slim\Application;
 use MVQN\Slim\Middleware\Handlers\MethodNotAllowedHandler;
 use MVQN\Slim\Middleware\Handlers\NotFoundHandler;
 use MVQN\Slim\Middleware\Handlers\UnauthorizedHandler;
@@ -27,7 +27,7 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
 // Create a new instance of a Slim 4 Application.
-$app = new App();
+$app = new Application();
 
 // Add Routing Middleware, which is necessary for any routing.
 $app->addRoutingMiddleware();
