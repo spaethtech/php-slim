@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace MVQN\Slim\Controllers;
 
-use MVQN\Slim\App;
+use MVQN\Slim\Application;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 use Slim\Exception\HttpNotFoundException;
@@ -16,7 +16,7 @@ use Slim\Interfaces\RouteGroupInterface;
  * @package MVQN\Slim\Controllers
  * @final
  *
- * @author Ryan Spaeth <rspaeth@mvqn.net>
+ * @author Ryan Spaeth
  * @copyright 2020 Spaeth Technologies, Inc.
  */
 final class ScriptController extends Controller
@@ -29,19 +29,20 @@ final class ScriptController extends Controller
     /**
      * ScriptController constructor.
      *
-     * @param App $app The Slim Application for which to configure routing.
-     * @param string $path The base path to use when loading assets, defaults to "./scripts/".
+     * @param Application $app The {@see Application} to which this Controller belongs.
+     * @param string $path The base path to use when loading scripts, defaults to "./scripts/".
+     * @param string $pattern An optional {@see RouteGroup} pattern to use for this Controller, defaults to "".
      */
-    public function __construct(App $app, string $path = "./scripts/")
+    public function __construct(Application $app, string $path = "./scripts/", string $pattern = "")
     {
-        parent::__construct($app);
+        parent::__construct($app, $pattern);
         $this->path = $path;
     }
 
     /**
      * @inheritDoc
      */
-    public function __invoke(App $app): RouteGroupInterface
+    public function __invoke(Application $app): RouteGroupInterface
     {
         // Mapped, in cases where a DI Container replaces the $this context in Closures.
         $self = $this;
@@ -55,6 +56,7 @@ final class ScriptController extends Controller
                     $file = $args["file"] ?? "index";
                     $ext = $args["ext"] ?? "php";
 
+                    /*
                     // Interpolate the absolute path to the PHP script.
                     $path = rtrim($self->path, "/") . "/$file.$ext";
 
@@ -64,6 +66,14 @@ final class ScriptController extends Controller
                         // Return the default 404 page!
                         throw new HttpNotFoundException($request);
                     }
+                    */
+
+                    // Interpolate the absolute path to the static asset.
+                    $path = realpath(rtrim($self->path, "/") . "/$file.$ext");
+
+                    // IF the static asset file does not exist, THEN throw a HTTP 404 Not Found Exception!
+                    if (!$path)
+                        throw new HttpNotFoundException($request);
 
                     /** @noinspection PhpIncludeInspection */
 
@@ -76,5 +86,7 @@ final class ScriptController extends Controller
             )->setName(ScriptController::class);
 
         });
+
     }
+
 }
