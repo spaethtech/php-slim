@@ -9,8 +9,7 @@
             "email": "rspaeth@mvqn.net"
         }
     ],
-    "minimum-stability": "dev",
-    "prefer-stable": true,
+    "minimum-stability": "stable",
     "require": {
         "php": "~7.3",
         "ext-json": "*",
