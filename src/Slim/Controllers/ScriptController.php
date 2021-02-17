@@ -1,4 +1,4 @@
-<?php /** @noinspection PhpUnusedParameterInspection */
+<?php /** @noinspection PhpUnused, PhpUnusedParameterInspection */
 declare(strict_types=1);
 
 namespace MVQN\Slim\Controllers;
