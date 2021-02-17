@@ -37,6 +37,7 @@ final class ScriptController extends Controller
     {
         parent::__construct($app, $prefix);
         $this->path = $path;
+
     }
 
     /**

@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection PhpUnused */
 declare(strict_types=1);
 
 namespace MVQN\Slim\Middleware\Handlers;
@@ -11,7 +11,8 @@ use Throwable;
  * Class NotFoundHandler
  *
  * @package MVQN\Slim\Error\Handlers
- * @author Ryan Spaeth <rspaeth@mvqn.net>
+ *
+ * @author Ryan Spaeth
  * @copyright 2020 Spaeth Technologies, Inc.
  */
 final class NotFoundHandler extends ErrorHandler
@@ -25,7 +26,8 @@ final class NotFoundHandler extends ErrorHandler
      *
      * @return Response
      */
-    public function __invoke(Request $request, Throwable $exception, bool $displayErrorDetails, bool $logErrors, bool $logErrorDetails): Response
+    public function __invoke(Request $request, Throwable $exception, bool $displayErrorDetails, bool $logErrors,
+        bool $logErrorDetails): Response
     {
         // Setup some debugging information to pass along to the template...
         $data = [
@@ -36,9 +38,10 @@ final class NotFoundHandler extends ErrorHandler
             "routes"        => $this->app->getRouteCollector()->getRoutes(),
         ];
 
+        // Instantiate a response object and return the rendered template.
         $response = $this->app->getResponseFactory()->createResponse(404);
-        //return $this->render($response, "404.html.twig", $data);
         return $this->render($response, __DIR__ . "/templates/404.php", $data);
+
     }
 
 }

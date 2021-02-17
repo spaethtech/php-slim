@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection PhpUnused */
 declare(strict_types=1);
 
 namespace MVQN\Slim\Middleware\Authentication\Authenticators\Exceptions;
@@ -6,10 +6,8 @@ namespace MVQN\Slim\Middleware\Authentication\Authenticators\Exceptions;
 use Exception;
 
 /**
- * @author Ryan Spaeth <rspaeth@mvqn.net>
+ * @author Ryan Spaeth
  * @copyright 2020 Spaeth Technologies, Inc.
- *
- * @noinspection PhpUnused
  */
 final class InvalidCallbackException extends Exception
 {

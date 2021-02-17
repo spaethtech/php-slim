@@ -35,7 +35,7 @@ $app->addRoutingMiddleware();
 // Here we add our custom Query-based router and specify the following:
 // - An optional default route, when none is provided.
 // - An optional RegEx to assist with URL Rewrites, when desired.
-$app->addQueryStringRoutingMiddleware("/", ["#/public/#" => "/"]);
+$app->useQueryStringRouter("/", ["#/public/#" => "/"]);
 
 /**
  * Add our custom Error Handling Middleware.
@@ -50,7 +50,7 @@ $errorMiddleware->setErrorHandler(HttpNotFoundException::class, new NotFoundHand
 $errorMiddleware->setErrorHandler(HttpMethodNotAllowedException::class, new MethodNotAllowedHandler($app)); // 405
 
 // Add an application-level Authenticator.
-$app->addAuthenticator(new FixedAuthenticator(true));
+$app->setDefaultAuthenticator(new FixedAuthenticator(true));
 
 // This Controller handles any static assets (i.e. png, jpg, html, pdf, etc.)...
 $app->addController(new AssetController($app, __DIR__ . "/assets/"))
@@ -95,6 +95,8 @@ $app->get("[/]", function (Request $request, Response $response, $args): Respons
     $response->getBody()->write("HOME");
     return $response;
 })->setName("home"); // Using a named alias.
+
+
 
 // Finally...we run our application!
 $app->run();

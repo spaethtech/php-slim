@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection PhpUnused */
 declare(strict_types=1);
 
 namespace MVQN\Slim\Middleware\Handlers;
@@ -12,13 +12,13 @@ use Throwable;
  * Class MethodNotAllowedHandler
  *
  * @package MVQN\Slim\Error\Handlers
- * @author Ryan Spaeth <rspaeth@mvqn.net>
+ *
+ * @author Ryan Spaeth
  * @copyright 2020 Spaeth Technologies, Inc.
  */
 final class MethodNotAllowedHandler extends ErrorHandler
 {
     /**
-     *
      * @param Request $request
      * @param Throwable $exception
      * @param bool $displayErrorDetails
@@ -38,9 +38,10 @@ final class MethodNotAllowedHandler extends ErrorHandler
             "methods"       => RouteContext::fromRequest($request)->getRoutingResults()->getAllowedMethods(),
         ];
 
+        // Instantiate a response object and return the rendered template.
         $response = $this->app->getResponseFactory()->createResponse(405);
-        //return $this->render($response, "405.html.twig", $data);
         return $this->render($response, __DIR__ . "/templates/405.php", $data);
+
     }
 
 }

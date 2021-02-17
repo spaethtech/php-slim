@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection PhpUnused */
 declare(strict_types=1);
 
 namespace MVQN\Slim\Middleware\Authentication;
@@ -14,7 +14,8 @@ use Slim\Exception\HttpUnauthorizedException;
  * Class AuthenticationHandler
  *
  * @package MVQN\Slim\Middleware\Authentication
- * @author Ryan Spaeth <rspaeth@mvqn.net>
+ *
+ * @author Ryan Spaeth
  * @copyright 2020 Spaeth Technologies, Inc.
  */
 class AuthenticationHandler implements MiddlewareInterface
@@ -32,14 +33,17 @@ class AuthenticationHandler implements MiddlewareInterface
     public function __construct(App $app)
     {
         $this->app = $app;
+
     }
 
     /**
      * @inheritDoc
+     *
      * @throws HttpUnauthorizedException
      */
     public function process(Request $request, RequestHandler $handler): Response
     {
+        // IF there is an "authenticated" attribute contained within the request, then a handler must have passed!
         if($request->getAttribute("authenticated"))
         {
             return $handler->handle($request);
@@ -48,5 +52,7 @@ class AuthenticationHandler implements MiddlewareInterface
         {
             throw new HttpUnauthorizedException($request);
         }
+
     }
+
 }

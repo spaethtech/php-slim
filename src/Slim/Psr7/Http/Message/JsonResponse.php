@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection PhpUnused */
 declare(strict_types=1);
 
 namespace MVQN\Slim\Psr7\Http\Message;
@@ -10,6 +10,7 @@ use Slim\Psr7\Factory\ResponseFactory;
  * Class JsonResponse
  *
  * @package MVQN\Slim\Psr7\Http\Message
+ *
  * @author Ryan Spaeth
  * @copyright 2020 Spaeth Technologies, Inc.
  */
@@ -29,6 +30,7 @@ class JsonResponse
     {
         $response = (new ResponseFactory())->createResponse(200);
         return self::fromResponse($response, $data, $options);
+
     }
 
     /**
@@ -44,6 +46,7 @@ class JsonResponse
     {
         $response->getBody()->write(json_encode($data, $options));
         return $response->withHeader("Content-Type", "application/json");
+
     }
 
 }

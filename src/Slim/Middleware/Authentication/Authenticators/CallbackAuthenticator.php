@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection PhpUnused */
 declare(strict_types=1);
 
 namespace MVQN\Slim\Middleware\Authentication\Authenticators;
@@ -13,7 +13,8 @@ use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
  * Class CallbackAuthenticator
  *
  * @package MVQN\Slim\Middleware\Authentication\Authenticators
- * @author Ryan Spaeth <rspaeth@mvqn.net>
+ *
+ * @author Ryan Spaeth
  * @copyright 2020 Spaeth Technologies, Inc.
  */
 class CallbackAuthenticator extends Authenticator
@@ -44,5 +45,7 @@ class CallbackAuthenticator extends Authenticator
             ->withAttribute("authenticated", ($this->authenticator)($request));
 
         return $handler->handle($request);
+
     }
+
 }
