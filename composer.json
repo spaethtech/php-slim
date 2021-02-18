@@ -1,6 +1,6 @@
 {
     "name": "mvqn/slim",
-    "description": "A collection of Slim 4 Middleware.",
+    "description": "A collection of Slim 4 Middleware and custom Application.",
     "type": "library",
     "license": "MIT",
     "authors": [
