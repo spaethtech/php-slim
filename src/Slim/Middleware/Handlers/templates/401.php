@@ -10,7 +10,7 @@
     <p>You are not authorized to view this page.</p>
 
     <?php
-    use MVQN\Slim\Middleware\Authentication\Authenticators\Authenticator;
+    use SpaethTech\Slim\Middleware\Authentication\Authenticators\Authenticator;
     use Slim\Routing\Route;
 
     /**

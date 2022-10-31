@@ -1,7 +1,7 @@
 <?php /** @noinspection PhpUnused */
 declare(strict_types=1);
 
-namespace MVQN\Slim\Psr7\Http\Message;
+namespace SpaethTech\Slim\Psr7\Http\Message;
 
 use Psr\Http\Message\ResponseInterface;
 use Slim\Psr7\Factory\ResponseFactory;
@@ -9,7 +9,7 @@ use Slim\Psr7\Factory\ResponseFactory;
 /**
  * Class JsonResponse
  *
- * @package MVQN\Slim\Psr7\Http\Message
+ * @package SpaethTech\Slim\Psr7\Http\Message
  *
  * @author Ryan Spaeth
  * @copyright 2020 Spaeth Technologies, Inc.

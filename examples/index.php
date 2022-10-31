@@ -8,16 +8,16 @@ require_once __DIR__ . "/../vendor/autoload.php";
  */
 
 use App\Controllers\ExampleController;
-use MVQN\Slim\Middleware\Authentication\AuthenticationHandler;
-use MVQN\Slim\Middleware\Authentication\Authenticators\CallbackAuthenticator;
-use MVQN\Slim\Middleware\Authentication\Authenticators\FixedAuthenticator;
-use MVQN\Slim\Psr7\Http\Message\JsonResponse;
-use MVQN\Slim\Controllers\AssetController;
-use MVQN\Slim\Controllers\ScriptController;
-use MVQN\Slim\Application;
-use MVQN\Slim\Middleware\Handlers\MethodNotAllowedHandler;
-use MVQN\Slim\Middleware\Handlers\NotFoundHandler;
-use MVQN\Slim\Middleware\Handlers\UnauthorizedHandler;
+use SpaethTech\Slim\Middleware\Authentication\AuthenticationHandler;
+use SpaethTech\Slim\Middleware\Authentication\Authenticators\CallbackAuthenticator;
+use SpaethTech\Slim\Middleware\Authentication\Authenticators\FixedAuthenticator;
+use SpaethTech\Slim\Psr7\Http\Message\JsonResponse;
+use SpaethTech\Slim\Controllers\AssetController;
+use SpaethTech\Slim\Controllers\ScriptController;
+use SpaethTech\Slim\Application;
+use SpaethTech\Slim\Middleware\Handlers\MethodNotAllowedHandler;
+use SpaethTech\Slim\Middleware\Handlers\NotFoundHandler;
+use SpaethTech\Slim\Middleware\Handlers\UnauthorizedHandler;
 
 use Slim\Exception\HttpMethodNotAllowedException;
 use Slim\Exception\HttpNotFoundException;

@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace MVQN\Slim;
+namespace SpaethTech\Slim;
 
-use MVQN\Slim\Middleware\Authentication\Authenticators\Authenticator;
-use MVQN\Slim\Middleware\Routing\QueryStringRouter;
-use MVQN\Slim\Controllers\Controller;
+use SpaethTech\Slim\Middleware\Authentication\Authenticators\Authenticator;
+use SpaethTech\Slim\Middleware\Routing\QueryStringRouter;
+use SpaethTech\Slim\Controllers\Controller;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Slim\App;
@@ -19,7 +19,7 @@ use Slim\Psr7\Factory\ResponseFactory;
 /**
  * Extends the default {@see App}, but also automatically creates a PSR-7 {@see ResponseFactory} when none is provided.
  *
- * @package MVQN\Slim\Controllers
+ * @package SpaethTech\Slim\Controllers
  *
  * @author Ryan Spaeth
  * @copyright 2020 Spaeth Technologies, Inc.

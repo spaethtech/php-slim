@@ -4,8 +4,8 @@ declare(strict_types=1);
 namespace App\Controllers;
 
 use DateTime;
-use MVQN\Slim\Application;
-use MVQN\Slim\Controllers\Controller;
+use SpaethTech\Slim\Application;
+use SpaethTech\Slim\Controllers\Controller;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Interfaces\RouteCollectorProxyInterface;
@@ -14,7 +14,7 @@ use Slim\Interfaces\RouteGroupInterface;
 /**
  * An example Controller to handle routing and delivery using actions.
  *
- * @package MVQN\Slim\Controllers
+ * @package SpaethTech\Slim\Controllers
  * @final
  *
  * @author Ryan Spaeth

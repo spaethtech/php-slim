@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace MVQN\Slim\Controllers;
+namespace SpaethTech\Slim\Controllers;
 
-use MVQN\Slim\Application;
+use SpaethTech\Slim\Application;
 use Slim\Interfaces\RouteCollectorProxyInterface;
 use Slim\Interfaces\RouteGroupInterface;
 use Slim\Routing\RouteCollectorProxy;
@@ -15,7 +15,7 @@ use Slim\Routing\RouteGroup;
  * _NOTE: Controllers can only be added directly to an {@see Application} and can not be part of a {@see RouteGroup},
  * as they are special {@see RouteGroup}s themselves._
  *
- * @package MVQN\Slim\Controllers
+ * @package SpaethTech\Slim\Controllers
  *
  * @author Ryan Spaeth
  * @copyright 2020 Spaeth Technologies, Inc.

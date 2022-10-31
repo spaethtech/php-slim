@@ -1,12 +1,12 @@
 {
-    "name": "mvqn/slim",
+    "name": "spaethtech/slim",
     "description": "A collection of Slim 4 Middleware and custom Application.",
     "type": "library",
     "license": "MIT",
     "authors": [
         {
             "name": "Ryan Spaeth",
-            "email": "rspaeth@mvqn.net"
+            "email": "rspaeth@spaethtech.com"
         }
     ],
     "minimum-stability": "stable",
@@ -21,7 +21,7 @@
     },
     "autoload": {
         "psr-4": {
-            "MVQN\\": "./src/"
+            "SpaethTech\\": "./src/"
         }
     },
     "autoload-dev": {

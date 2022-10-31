@@ -10,7 +10,7 @@
     <p>The page you are looking for could not be found.</p>
 
     <?php
-    use MVQN\Slim\Middleware\Authentication\Authenticators\Authenticator;
+    use SpaethTech\Slim\Middleware\Authentication\Authenticators\Authenticator;
     use Slim\Interfaces\RouteInterface;
 
     /**

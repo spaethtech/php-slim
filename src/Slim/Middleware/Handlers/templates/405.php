@@ -10,7 +10,7 @@
     <p>The current HTTP method/verb is not support by this endpoint.</p>
 
     <?php
-    use MVQN\Slim\Middleware\Authentication\Authenticators\Authenticator;
+    use SpaethTech\Slim\Middleware\Authentication\Authenticators\Authenticator;
 
     /**
      * @var bool            $debug

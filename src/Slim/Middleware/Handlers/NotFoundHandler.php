@@ -1,7 +1,7 @@
 <?php /** @noinspection PhpUnused */
 declare(strict_types=1);
 
-namespace MVQN\Slim\Middleware\Handlers;
+namespace SpaethTech\Slim\Middleware\Handlers;
 
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -10,7 +10,7 @@ use Throwable;
 /**
  * Class NotFoundHandler
  *
- * @package MVQN\Slim\Error\Handlers
+ * @package SpaethTech\Slim\Error\Handlers
  *
  * @author Ryan Spaeth
  * @copyright 2020 Spaeth Technologies, Inc.
