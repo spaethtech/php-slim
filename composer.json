@@ -1,5 +1,5 @@
 {
-    "name": "spaethtech/slim",
+    "name": "spaethtech/php-slim",
     "description": "A collection of Slim 4 Middleware and custom Application.",
     "type": "library",
     "license": "MIT",
