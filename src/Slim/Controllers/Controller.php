@@ -1,50 +1,72 @@
 <?php
-declare(strict_types=1);
 
 namespace SpaethTech\Slim\Controllers;
 
-use SpaethTech\Slim\Application;
-use Slim\Interfaces\RouteCollectorProxyInterface;
-use Slim\Interfaces\RouteGroupInterface;
-use Slim\Routing\RouteCollectorProxy;
-use Slim\Routing\RouteGroup;
+use Psr\Container\ContainerInterface;
+use Psr\Http\Server\MiddlewareInterface;
+use SpaethTech\Support\Config\PhpConfig as Config;
 
 /**
- * An abstract Controller class, from which to extend all other Controllers.
+ * Controller
  *
- * _NOTE: Controllers can only be added directly to an {@see Application} and can not be part of a {@see RouteGroup},
- * as they are special {@see RouteGroup}s themselves._
+ * @author    Ryan Spaeth <rspaeth@spaethtech.com>
+ * @copyright 2022, Spaeth Technologies Inc.
  *
- * @package SpaethTech\Slim\Controllers
- *
- * @author Ryan Spaeth
- * @copyright 2020 Spaeth Technologies, Inc.
  */
-abstract class Controller extends RouteCollectorProxy implements RouteCollectorProxyInterface
+abstract class Controller
 {
-    /**
-     * Controller constructor.
-     *
-     * @param Application $app The {@see Application} to which this Controller belongs.
-     * @param string $prefix An optional {@see RouteGroup} prefix to use for this Controller, defaults to "".
-     */
-    public function __construct(Application $app, string $prefix = "")
+    protected ContainerInterface $container;
+
+    protected Config $config;
+
+    public function __construct(ContainerInterface $container, Config $config)
     {
-        parent::__construct(
-            $app->getResponseFactory(),
-            $app->getCallableResolver(),
-            $app->getContainer(),
-            $app->getRouteCollector(),
-            $prefix
-        );
+        $this->container = $container;
+        $this->config = $config;
+    }
+
+    public static function validateQueryParam(string $query, string $pattern, mixed $default, array &$expected = [],  //int $pad = 0,
+        callable $func = null) : bool
+    {
+        if(!preg_match($pattern, $query, $matches, PREG_UNMATCHED_AS_NULL))
+            return false;
+
+        foreach ($matches as $key => &$value)
+        {
+            if (is_int($key))
+                unset($matches[$key]);
+
+            if ($value == null)
+                $value = $default;
+
+            if ($func)
+                $value = $func($value);
+        }
+
+        //if (count($matches) < $pad)
+        //    $matches = array_pad($matches, $pad, $func($default));
+
+        foreach($expected as $k => $v)
+        {
+            if (array_key_exists($k, $matches))
+                $expected[$k] = $matches[$v];
+        }
+
+
+        //return $matches;
+        $expected = $matches;
+
+        return true;
+    }
+
+
+    public static function getCallingMethod()
+    {
+        return debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT, 3)[2]["function"];
 
     }
 
-    /**
-     * @param Application $app The {@see Application} to which this Controller belongs.
-     *
-     * @return RouteGroupInterface Returns a {@see RouteGroup} for method chaining.
-     */
-    public abstract function __invoke(Application $app): RouteGroupInterface;
 
 }
+
+
